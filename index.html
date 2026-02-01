@@ -4,658 +4,645 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KahraLight Store</title>
-    <!-- خط كايرو وتجزئة الأيقونات -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-blue: #0044cc; /* Kahra */
-            --primary-orange: #ff9900; /* Light */
-            --canary-yellow: #fff700;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --text-dark: #1a1a1a;
-            --text-gray: #666;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --radius: 12px;
+            --primary: #0044cc; /* أزرق */
+            --secondary: #ff9900; /* برتقالي */
+            --bg-body: #f6f6f6;
+            --bg-card: #ffffff;
+            --text-main: #1a1a1a;
+            --text-sub: #666666;
+            --ticker-bg: #fff700; /* أصفر كناري */
+            --shadow: 0 5px 15px rgba(0,0,0,0.05);
+            --radius: 8px;
         }
 
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        
-        body { background-color: var(--bg-light); color: var(--text-dark); padding-bottom: 60px; }
+        /* Themes */
+        body.theme-dark-blue { --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #fff; --text-sub: #cbd5e1; --primary: #3b82f6; }
+        body.theme-orange-blue { --primary: #ff9900; --secondary: #0044cc; }
+        body.theme-yellow-white { --bg-body: #fff; --primary: #ffd700; --secondary: #000; --text-main: #000; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; font-family: 'Cairo', 'Roboto', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 50px; transition: 0.3s; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
         img { max-width: 100%; display: block; }
+        input, select, textarea { font-family: inherit; }
 
-        /* --- Header (Shopify Style) --- */
-        header {
-            background: var(--white);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        /* --- Header --- */
+        header { background: var(--bg-card); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 900; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-size: 26px; font-weight: 900; }
+        .logo span:first-child { color: var(--primary); }
+        .logo span:last-child { color: var(--secondary); text-shadow: 0 0 10px var(--secondary); }
+        
+        .search-box { flex: 1; margin: 0 20px; max-width: 500px; display: none; position: relative; }
+        .search-box input { width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; background: #f9f9f9; }
+        @media(min-width: 768px) { .search-box { display: block; } }
 
-        .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-        .logo-kahra { color: var(--primary-blue); }
-        .logo-light { color: var(--primary-orange); text-shadow: 0 0 15px rgba(255, 153, 0, 0.4); }
-
-        .search-wrapper {
-            flex: 1; margin: 0 20px; position: relative; display: none; /* Hidden on mobile initially */
-        }
-        @media(min-width: 768px) { .search-wrapper { display: block; } }
-
-        .search-input {
-            width: 100%; padding: 12px 40px 12px 15px;
-            background: #f1f1f1; border: none; border-radius: 8px; font-size: 14px;
-        }
-        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; }
-
-        .nav-icons { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { font-size: 1.3rem; color: #333; position: relative; cursor: pointer; }
-        .badge { position: absolute; top: -5px; right: -5px; background: var(--primary-orange); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
-
-        /* --- Mobile Search --- */
-        .mobile-search { padding: 10px; background: white; display: block; border-bottom: 1px solid #eee; }
-        @media(min-width: 768px) { .mobile-search { display: none; } }
-
-        /* --- Slider --- */
-        .slider-container { width: 100%; height: 200px; position: relative; overflow: hidden; }
-        @media(min-width: 768px) { .slider-container { height: 400px; } }
-        .slide { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
-        .slide.active { opacity: 1; }
-
-        /* --- Ticker (Yellow Bar) --- */
-        .ticker-wrap {
-            width: 100%; background: var(--canary-yellow); height: 40px; overflow: hidden; position: relative;
-            display: flex; align-items: center; border-bottom: 1px solid #e6de00;
-        }
-        .ticker {
-            white-space: nowrap; font-weight: 700; font-size: 14px; color: #000; position: absolute;
-            will-change: transform;
-        }
-        /* Animation will be injected by JS */
+        .nav-tools { display: flex; gap: 15px; align-items: center; }
+        .lang-switch select { border: none; background: transparent; font-weight: bold; cursor: pointer; color: var(--text-main); }
+        .icon-btn { font-size: 1.2rem; cursor: pointer; position: relative; }
+        .badge { position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
 
         /* --- Sidebar --- */
-        .sidebar {
-            position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
-            background: var(--white); z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1); padding: 20px; display: flex; flex-direction: column;
-        }
-        .sidebar.active { right: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .sidebar-header h3 { font-weight: 700; color: var(--primary-blue); }
-        .cat-item {
-            padding: 15px 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 600;
-            display: flex; justify-content: space-between; color: #444; transition: 0.2s;
-        }
-        .cat-item:hover { color: var(--primary-blue); padding-right: 15px; }
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-            z-index: 1500; display: none; backdrop-filter: blur(2px);
-        }
-        .overlay.active { display: block; }
-
-        /* --- Products Grid (Shopify Style) --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #111; }
-
-        .grid {
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
-            gap: 15px;
-        }
-        @media(min-width: 768px) { 
-            .grid { grid-template-columns: repeat(4, 1fr); gap: 25px; } 
-        }
-
-        .product-card {
-            background: var(--white); border-radius: var(--radius); overflow: hidden;
-            transition: all 0.3s ease; position: relative; cursor: pointer;
-            border: 1px solid #eee;
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: transparent; }
+        .sidebar { position: fixed; top: 0; width: 260px; height: 100%; background: var(--bg-card); z-index: 1000; padding: 20px; transition: 0.3s; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+        html[dir="rtl"] .sidebar { right: -270px; } html[dir="rtl"] .sidebar.active { right: 0; }
+        html[dir="ltr"] .sidebar { left: -270px; } html[dir="ltr"] .sidebar.active { left: 0; }
         
-        .p-img-box { width: 100%; padding-top: 100%; /* 1:1 Aspect Ratio */ position: relative; background: #f9f9f9; }
-        .p-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: transform 0.3s; }
-        .product-card:hover .p-img { transform: scale(1.05); }
-        
-        .p-details { padding: 12px; }
-        .p-cat { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-        .p-title { font-size: 14px; font-weight: 600; margin: 5px 0; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .p-price-row { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-        .p-price { font-weight: 700; color: var(--primary-blue); font-size: 15px; }
-        .p-old-price { font-size: 12px; text-decoration: line-through; color: #aaa; }
-        
-        .btn-quick-add {
-            width: 100%; background: var(--text-dark); color: #fff; border: none; padding: 10px;
-            font-size: 13px; font-weight: 600; border-radius: 6px; margin-top: 10px; cursor: pointer;
-        }
-        .btn-quick-add:active { transform: scale(0.98); }
+        .sidebar-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .cat-link { display: block; padding: 10px; margin-bottom: 5px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .cat-link:hover { background: var(--primary); color: #fff; }
 
-        /* --- Product Modal (Full Screen on Mobile) --- */
-        .modal {
-            display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.6); overflow-y: auto;
-        }
-        .modal-box {
-            background-color: #fff; margin: 2% auto; padding: 0; width: 95%; max-width: 900px;
-            border-radius: var(--radius); position: relative; display: flex; flex-direction: column; overflow: hidden;
-        }
-        @media(min-width: 768px) { .modal-box { flex-direction: row; margin: 5% auto; height: auto; } }
+        /* --- Slider --- */
+        .hero-slider { height: 250px; position: relative; overflow: hidden; }
+        @media(min-width: 768px) { .hero-slider { height: 400px; } }
+        .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; }
+        .slide.active { opacity: 1; }
 
-        .modal-close { position: absolute; top: 15px; left: 15px; background: #eee; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-size: 18px; }
+        /* --- Ticker --- */
+        .ticker-wrap { background: var(--ticker-bg); overflow: hidden; height: 40px; display: flex; align-items: center; border-bottom: 1px solid #ddd; }
+        .ticker-content { white-space: nowrap; font-weight: bold; color: #000; font-size: 14px; display: inline-block; padding-left: 100%; }
+        /* Animation is set via JS based on Language */
 
-        .m-img-col { background: #f4f4f4; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 300px; }
-        .m-img-col img { max-height: 400px; width: auto; mix-blend-mode: multiply; }
+        /* --- Products Grid --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 25px; } }
+
+        .product-card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; cursor: pointer; position: relative; }
+        .product-card:hover { transform: translateY(-5px); }
+        .p-img { width: 100%; height: 200px; object-fit: cover; background: #f4f4f4; }
+        .p-info { padding: 15px; }
+        .p-cat { font-size: 12px; color: var(--text-sub); text-transform: uppercase; }
+        .p-title { font-weight: bold; margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .p-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; margin: 0 5px; }
+        .stars { color: gold; font-size: 12px; }
+
+        /* --- Modal (Product Details) --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; overflow-y: auto; padding: 20px 0; }
+        .modal-content { background: var(--bg-card); width: 95%; max-width: 900px; margin: auto; border-radius: 10px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        @media(min-width: 768px) { .modal-content { flex-direction: row; } }
         
-        .m-info-col { flex: 1; padding: 25px; display: flex; flex-direction: column; justify-content: center; }
-        .m-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-        .m-desc { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 20px; }
-        
-        .action-row { display: flex; gap: 10px; margin-top: 20px; }
-        .qty-input { width: 60px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; }
-        
-        .btn-buy { flex: 1; background: var(--primary-orange); color: #000; border: none; padding: 14px; font-weight: 700; border-radius: 6px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 10px rgba(255,153,0,0.3); }
+        .modal-gallery { flex: 1; background: #f8f8f8; position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+        .main-img { max-height: 400px; max-width: 100%; }
+        .thumbs { position: absolute; bottom: 10px; display: flex; gap: 5px; }
+        .thumb { width: 50px; height: 50px; border: 2px solid transparent; cursor: pointer; object-fit: cover; }
+        .thumb.active { border-color: var(--primary); }
 
-        /* --- Admin Login Modal --- */
-        .login-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff;
-            z-index: 4000; display: none; justify-content: center; align-items: center; flex-direction: column;
-        }
-        .login-box { text-align: center; width: 90%; max-width: 350px; }
-        .login-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 8px; margin-bottom: 15px; font-size: 16px; transition: 0.3s; }
-        .login-input:focus { border-color: var(--primary-blue); }
-        .btn-login { width: 100%; padding: 15px; background: var(--primary-blue); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .modal-details { flex: 1; padding: 30px; }
+        .modal-close { position: absolute; top: 10px; right: 10px; font-size: 24px; cursor: pointer; background: #eee; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        html[dir="rtl"] .modal-close { left: 10px; right: auto; }
 
-        /* --- Admin Panel --- */
-        #admin-panel { display: none; min-height: 100vh; background: #f0f2f5; padding-bottom: 50px; }
-        .admin-header { background: #1a1a1a; color: #fff; padding: 20px; display: flex; justify-content: space-between; }
-        .admin-container { padding: 20px; }
-        .stat-card { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; text-align: center; }
-        .stat-num { font-size: 2rem; font-weight: bold; color: var(--primary-blue); }
+        .btn-buy { width: 100%; padding: 15px; background: var(--secondary); color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 5px; margin-top: 15px; transition: 0.3s; }
+        .btn-buy:hover { opacity: 0.9; }
         
-        .admin-nav { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom: 20px; }
-        .admin-nav button { white-space: nowrap; padding: 10px 20px; background: #fff; border: 1px solid #ddd; border-radius: 20px; cursor: pointer; }
-        .admin-nav button.active { background: var(--primary-blue); color: #fff; border-color: var(--primary-blue); }
-
-        /* Forms in Admin */
-        .admin-form input, .admin-form textarea, .admin-form select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        .order-form input, .order-form select, .order-form textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        
+        /* Success Animation */
+        .success-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 3000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .check-icon { font-size: 80px; color: #28a745; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { 0%{transform: scale(0);} 100%{transform: scale(1);} }
 
         /* --- Footer --- */
-        footer { background: #111; color: #ccc; padding: 40px 20px; font-size: 14px; margin-top: 40px; }
-        footer h4 { color: #fff; margin-bottom: 15px; font-size: 16px; }
-        footer input, footer textarea { background: #333; border: none; color: #fff; }
+        footer { background: #111; color: #ccc; padding: 40px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-top: 50px; }
+        footer h3 { color: #fff; margin-bottom: 15px; }
+        footer a { display: block; margin-bottom: 8px; font-size: 14px; }
+        footer input, footer textarea { background: #222; border: 1px solid #333; color: #fff; }
+
+        /* --- ADMIN PANEL --- */
+        .admin-login { position: fixed; inset: 0; background: #fff; z-index: 5000; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .admin-panel { display: none; padding: 20px; background: #f4f6f8; min-height: 100vh; }
+        .admin-header { display: flex; justify-content: space-between; margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-box { background: #fff; padding: 20px; border-radius: 8px; border-right: 4px solid var(--primary); }
+        
+        .admin-tabs button { padding: 10px 20px; border: none; background: #ddd; cursor: pointer; margin-right: 5px; }
+        .admin-tabs button.active { background: var(--primary); color: #fff; }
+        .tab-content { background: #fff; padding: 20px; display: none; min-height: 400px; }
+        .tab-content.active { display: block; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #eee; text-align: start; }
+        th { background: #f9f9f9; }
+
+        /* Animation Keyframes */
+        @keyframes ticker-rtl { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes ticker-ltr { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
     </style>
 </head>
 <body>
 
-    <!-- Overlay for Sidebar -->
-    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
     <!-- Header -->
     <header>
-        <div class="icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-        
-        <div class="logo">
-            <span class="logo-kahra">Kahra</span><span class="logo-light">Light</span>
-        </div>
-
-        <div class="search-wrapper">
-            <input type="text" class="search-input" id="desktopSearch" placeholder="بحث عن منتج..." onkeyup="searchProduct(this.value)">
-            <i class="fas fa-search search-icon"></i>
-        </div>
-
-        <div class="nav-icons">
-            <div class="icon-btn" onclick="toggleAdmin()"><i class="fas fa-user-circle"></i></div>
-            <div class="icon-btn">
-                <i class="fas fa-shopping-bag"></i>
-                <span class="badge" id="cartCount">0</span>
+        <div style="display: flex; gap:10px; align-items: center;">
+            <div class="icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="logo" id="site-logo">
+                <span>Kahra</span><span>Light</span>
             </div>
         </div>
-    </header>
 
-    <!-- Mobile Search -->
-    <div class="mobile-search">
-        <input type="text" class="search-input" placeholder="بحث..." onkeyup="searchProduct(this.value)">
-    </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" onkeyup="searchProds()" placeholder="بحث...">
+        </div>
+
+        <div class="nav-tools">
+            <div class="lang-switch">
+                <select id="langSelect" onchange="changeLang(this.value)">
+                    <option value="ar">العربية</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="icon-btn" onclick="toggleAdmin()"><i class="fas fa-user-cog"></i></div>
+            <div class="icon-btn"><i class="fas fa-shopping-cart"></i> <span class="badge" id="cartCount">0</span></div>
+        </div>
+    </header>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>التصنيفات</h3>
-            <div onclick="toggleSidebar()" style="cursor:pointer; font-size:20px;">&times;</div>
+            <h3 data-trans="categories">الفئات</h3>
+            <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer"></i>
         </div>
-        <ul id="category-list">
-            <!-- Categories Injected Here -->
-        </ul>
+        <div id="cat-list"></div>
     </div>
 
-    <!-- Main Content -->
-    <div id="app-container">
-        
+    <!-- Main App -->
+    <div id="app-view">
         <!-- Slider -->
-        <div class="slider-container" id="hero-slider">
-            <!-- Images Injected JS -->
-        </div>
-
+        <div class="hero-slider" id="slider"></div>
+        
         <!-- Ticker -->
         <div class="ticker-wrap">
-            <div class="ticker" id="news-ticker">
-                ⚡ شحن مجاني للطلبات فوق 5000 د.ج • تخفيضات 20% على الثريات • ضمان لمدة سنة على جميع المنتجات ⚡
-            </div>
+            <div class="ticker-content" id="ticker-text"></div>
         </div>
 
         <!-- Products -->
         <div class="container">
-            <h2 class="section-title">أحدث المنتجات</h2>
-            <div class="grid" id="products-grid">
-                <!-- Products Cards Here -->
-            </div>
+            <h2 style="margin-bottom: 20px;" data-trans="products">جميع المنتجات</h2>
+            <div class="grid" id="product-grid"></div>
         </div>
 
         <!-- Footer -->
         <footer>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
-                <div>
-                    <h4>اتصل بنا</h4>
-                    <p>الجزائر العاصمة</p>
-                    <p>0550-12-34-56</p>
-                </div>
-                <div>
-                    <h4>ابلاغ عن مشكلة</h4>
-                    <form onsubmit="event.preventDefault(); alert('تم استلام رسالتك');">
-                        <input type="text" placeholder="الاسم" style="width:100%; padding:8px; margin-bottom:5px;">
-                        <input type="email" placeholder="البريد" style="width:100%; padding:8px; margin-bottom:5px;">
-                        <textarea placeholder="الرسالة" style="width:100%; padding:8px; margin-bottom:5px;"></textarea>
-                        <button style="width:100%; padding:8px; background:var(--primary-orange); border:none; cursor:pointer;">ارسال</button>
-                    </form>
-                </div>
-                <div>
-                    <h4>روابط</h4>
-                    <p>سياسة الخصوصية</p>
-                    <p>من نحن</p>
-                </div>
+            <div>
+                <h3 data-trans="contact">اتصل بنا</h3>
+                <p>Algeria, Algiers</p>
+                <p>+213 555 000 000</p>
             </div>
-            <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid #333;">
-                &copy; 2024 KahraLight Store
+            <div>
+                <h3 data-trans="links">روابط</h3>
+                <a href="#" data-trans="privacy">سياسة الخصوصية</a>
+                <a href="#" data-trans="about">من نحن</a>
+            </div>
+            <div>
+                <h3 data-trans="report">ابلاغ عن مشكل</h3>
+                <form onsubmit="submitReport(event)">
+                    <input type="text" id="rep-name" placeholder="الاسم" required>
+                    <input type="email" id="rep-email" placeholder="الايميل" required style="margin-top:5px;">
+                    <textarea id="rep-msg" placeholder="الرسالة" required style="margin-top:5px;"></textarea>
+                    <button style="margin-top:5px; padding:5px 15px; cursor:pointer;" data-trans="send">ارسال</button>
+                </form>
             </div>
         </footer>
     </div>
 
     <!-- Product Modal -->
-    <div id="product-modal" class="modal">
-        <div class="modal-box">
+    <div id="prod-modal" class="modal">
+        <div class="modal-content">
             <div class="modal-close" onclick="closeModal()">&times;</div>
-            <div class="m-img-col">
-                <img id="m-img" src="" alt="Product">
+            <div class="modal-gallery">
+                <img src="" id="m-main-img" class="main-img">
+                <div class="thumbs" id="m-thumbs"></div>
             </div>
-            <div class="m-info-col">
-                <div style="font-size:12px; color:var(--primary-blue); margin-bottom:5px;">KahraLight Official</div>
-                <h1 id="m-title" class="m-title">اسم المنتج</h1>
-                <div id="m-price" style="font-size:24px; font-weight:bold; color:var(--primary-orange); margin-bottom:15px;"></div>
-                <p id="m-desc" class="m-desc">وصف...</p>
+            <div class="modal-details">
+                <div class="stars">★★★★★</div>
+                <h1 id="m-title"></h1>
+                <h2 id="m-price"></h2>
+                <p id="m-desc" style="color:#666; margin: 10px 0;"></p>
                 
-                <!-- Extra Links -->
-                <div style="margin-bottom:20px; font-size:13px;">
-                    <i class="fas fa-file-pdf"></i> <a href="#" style="text-decoration:underline;">تحميل fiche technique</a>
+                <div style="margin: 15px 0;">
+                    <a href="#" class="btn-doc"><i class="fas fa-file-pdf"></i> Fiche Technique</a>
+                    <a href="#" class="btn-doc"><i class="fas fa-certificate"></i> Export Cert</a>
                 </div>
 
-                <!-- Order Form inside Modal for better UX -->
-                <div style="background:#f9f9f9; padding:15px; border-radius:8px;">
-                    <div style="display:flex; gap:10px; margin-bottom:10px;">
-                        <div style="flex:1;">
-                            <label style="font-size:12px; font-weight:bold;">اللون</label>
-                            <select id="order-color" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;"></select>
-                        </div>
-                        <div>
-                            <label style="font-size:12px; font-weight:bold;">الكمية</label>
-                            <input type="number" id="order-qty" value="1" min="1" class="qty-input">
-                        </div>
+                <div class="order-form">
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="order-qty" value="1" min="1" placeholder="Qty">
+                        <select id="order-color"></select>
                     </div>
-
-                    <h4 style="margin:10px 0; font-size:14px;">معلومات التوصيل:</h4>
-                    <input type="text" id="cust-name" placeholder="الاسم الكامل" style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
-                    <input type="tel" id="cust-phone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
-                    <select id="cust-country" style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
-                        <option value="الجزائر">الجزائر</option>
-                        <option value="اسبانيا">اسبانيا</option>
-                        <option value="فرنسا">فرنسا</option>
-                        <option value="البرتغال">البرتغال</option>
-                    </select>
-                    <textarea id="cust-address" placeholder="العنوان بالتفصيل" style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px; height:60px;"></textarea>
                     
-                    <button class="btn-buy" onclick="submitOrder()">تأكيد الطلب</button>
+                    <h3 style="margin:15px 0;" data-trans="order_form">استمارة الطلب</h3>
+                    <input type="text" id="c-name" placeholder="الاسم الكامل" required>
+                    <input type="tel" id="c-phone" placeholder="رقم الهاتف" required>
+                    <select id="c-country">
+                        <option value="الجزائر">الجزائر</option>
+                        <option value="اسبانيا">España</option>
+                        <option value="فرنسا">France</option>
+                        <option value="البرتغال">Portugal</option>
+                    </select>
+                    <textarea id="c-addr" placeholder="العنوان"></textarea>
+                    <button class="btn-buy" onclick="placeOrder()" data-trans="buy_now">شراء الآن</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Login Overlay -->
-    <div id="login-modal" class="login-modal">
-        <div class="login-box">
-            <h2 style="margin-bottom:20px; color:var(--primary-blue);">دخول المدير</h2>
-            <input type="text" id="admin-user" placeholder="اسم المستخدم" class="login-input">
-            <input type="password" id="admin-pass" placeholder="كلمة المرور" class="login-input">
-            <button class="btn-login" onclick="checkLogin()">دخول</button>
-            <p id="login-error" style="color:red; margin-top:10px; display:none;">خطأ في البيانات!</p>
-            <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:10px; background:none; border:none; text-decoration:underline;">الرجوع للمتجر</button>
+    <!-- Success Animation -->
+    <div class="success-overlay" id="success-anim">
+        <i class="fas fa-check-circle check-icon"></i>
+        <h2 style="margin-top:20px;">تم الطلب بنجاح</h2>
+    </div>
+
+    <!-- Admin Login -->
+    <div id="admin-login" class="admin-login">
+        <div style="background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.1); width:300px; text-align:center;">
+            <h2>Admin Login</h2>
+            <input type="text" id="adm-user" placeholder="Username" style="width:100%; margin-top:10px; padding:10px; border:1px solid #ccc;">
+            <input type="password" id="adm-pass" placeholder="Password" style="width:100%; margin-top:10px; padding:10px; border:1px solid #ccc;">
+            <button onclick="loginAdmin()" style="width:100%; margin-top:15px; padding:10px; background:var(--primary); color:#fff; border:none; cursor:pointer;">Enter</button>
+            <p id="login-err" style="color:red; display:none; margin-top:10px;">Error!</p>
+            <a href="#" onclick="document.getElementById('admin-login').style.display='none'" style="display:block; margin-top:10px; font-size:12px;">Back to Store</a>
         </div>
     </div>
 
-    <!-- Admin Panel Interface -->
-    <div id="admin-panel">
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel">
         <div class="admin-header">
-            <h3>لوحة التحكم</h3>
-            <button onclick="logoutAdmin()" style="background:red; color:#fff; border:none; padding:5px 15px; border-radius:5px;">خروج</button>
+            <h2>Dashboard</h2>
+            <div>
+                <button onclick="logout()" style="background:red; color:#fff; border:none; padding:5px 15px; border-radius:5px;">Logout</button>
+                <button onclick="toggleAdmin()" style="background:#333; color:#fff; border:none; padding:5px 15px; border-radius:5px;">View Store</button>
+            </div>
         </div>
-        <div class="admin-container">
-            <div class="admin-nav">
-                <button class="active" onclick="switchTab('dashboard')">الرئيسية</button>
-                <button onclick="switchTab('products')">المنتجات</button>
-                <button onclick="switchTab('orders')">الطلبات</button>
-                <button onclick="switchTab('settings')">الإعدادات</button>
-            </div>
 
-            <!-- Dashboard -->
-            <div id="tab-dashboard" class="tab-content">
-                <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:15px;">
-                    <div class="stat-card">
-                        <div class="stat-num" id="stat-views">1.2K</div>
-                        <div>زيارات</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-num" id="stat-orders">0</div>
-                        <div>طلبات</div>
-                    </div>
-                </div>
-            </div>
+        <div class="stats-grid">
+            <div class="stat-box"><h3>Visits</h3><h1 id="st-visit">1205</h1></div>
+            <div class="stat-box"><h3>New Orders</h3><h1 id="st-new">0</h1></div>
+            <div class="stat-box"><h3>Total Sales</h3><h1 id="st-total">0</h1></div>
+        </div>
 
-            <!-- Products Add -->
-            <div id="tab-products" class="tab-content" style="display:none;">
-                <div class="admin-form" style="background:#fff; padding:20px; border-radius:10px;">
-                    <h4>إضافة منتج جديد</h4>
-                    <input id="new-p-name" type="text" placeholder="اسم المنتج">
-                    <input id="new-p-price" type="number" placeholder="السعر">
-                    <input id="new-p-cat" type="text" placeholder="الفئة (مثال: انارة)">
-                    <input id="new-p-img" type="text" placeholder="رابط الصورة">
-                    <textarea id="new-p-desc" placeholder="الوصف"></textarea>
-                    <button onclick="addProduct()" style="width:100%; background:green; color:#fff; padding:10px; border:none; border-radius:5px;">حفظ</button>
-                </div>
-            </div>
+        <div class="admin-tabs">
+            <button onclick="tab('products')" class="active">Products</button>
+            <button onclick="tab('orders')">Orders</button>
+            <button onclick="tab('messages')">Messages</button>
+            <button onclick="tab('settings')">Settings</button>
+        </div>
 
-            <!-- Orders Table -->
-            <div id="tab-orders" class="tab-content" style="display:none;">
-                <div style="background:#fff; padding:10px; border-radius:10px; overflow-x:auto;">
-                    <table style="width:100%; border-collapse:collapse; min-width:500px;">
-                        <thead style="background:#eee;">
-                            <tr>
-                                <th style="padding:10px; text-align:right;">العميل</th>
-                                <th style="padding:10px; text-align:right;">المنتج</th>
-                                <th style="padding:10px; text-align:right;">السعر</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orders-list-body"></tbody>
-                    </table>
-                </div>
+        <div id="tab-products" class="tab-content active">
+            <h3>Add / Edit Products</h3>
+            <div style="background:#f9f9f9; padding:15px; border:1px solid #eee; margin-bottom:20px;">
+                <input type="text" id="n-name" placeholder="Name" style="width:48%; padding:8px;">
+                <input type="text" id="n-cat" placeholder="Category" style="width:48%; padding:8px;">
+                <input type="number" id="n-price" placeholder="Price" style="width:48%; padding:8px; margin-top:5px;">
+                <input type="number" id="n-old" placeholder="Old Price" style="width:48%; padding:8px; margin-top:5px;">
+                <textarea id="n-desc" placeholder="Description" style="width:100%; margin-top:5px; padding:8px;"></textarea>
+                <input type="text" id="n-img" placeholder="Image URL (comma separated for slider)" style="width:100%; margin-top:5px; padding:8px;">
+                <input type="text" id="n-colors" placeholder="Colors (comma separated)" style="width:100%; margin-top:5px; padding:8px;">
+                <button onclick="addProduct()" style="background:green; color:white; padding:10px 20px; border:none; margin-top:10px;">Save Product</button>
             </div>
-            
-             <!-- Settings -->
-             <div id="tab-settings" class="tab-content" style="display:none;">
-                <div class="admin-form" style="background:#fff; padding:20px; border-radius:10px;">
-                    <h4>تعديل الشريط المتحرك</h4>
-                    <input type="text" id="ticker-input" placeholder="النص الجديد">
-                    <button onclick="updateTickerText()" style="width:100%; background:var(--primary-blue); color:#fff; padding:10px; border:none; border-radius:5px;">تحديث</button>
-                </div>
-            </div>
+            <h4>Import CSV</h4>
+            <input type="file" id="csvFile">
+            <button onclick="importCSV()">Upload CSV</button>
+            <hr style="margin:20px 0;">
+            <div id="admin-prod-list"></div>
+        </div>
 
+        <div id="tab-orders" class="tab-content">
+            <h3>Orders</h3>
+            <table>
+                <thead><tr><th>Date</th><th>Customer</th><th>Product</th><th>Country</th></tr></thead>
+                <tbody id="admin-orders-body"></tbody>
+            </table>
+        </div>
+
+        <div id="tab-messages" class="tab-content">
+            <h3>Reports & Messages</h3>
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead>
+                <tbody id="admin-msg-body"></tbody>
+            </table>
+        </div>
+
+        <div id="tab-settings" class="tab-content">
+            <h3>Settings</h3>
+            <label>Theme:</label>
+            <select onchange="changeTheme(this.value)" style="padding:5px;">
+                <option value="default">Kahra (Blue/Orange)</option>
+                <option value="theme-dark-blue">Dark Blue</option>
+                <option value="theme-orange-blue">Orange Primary</option>
+                <option value="theme-yellow-white">Yellow/White</option>
+            </select>
+            <br><br>
+            <label>Ticker Text:</label>
+            <input type="text" id="set-ticker" style="width:300px; padding:5px;">
+            <button onclick="updateTicker()">Update</button>
+            <br><br>
+            <label>Add Slider Image (URL):</label>
+            <input type="text" id="set-slide" style="width:300px; padding:5px;">
+            <button onclick="addSlide()">Add</button>
         </div>
     </div>
 
-    <!-- JS Logic -->
+    <!-- JS & Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-        // Config
+        // FIREBASE CONFIG
         const firebaseConfig = {
           apiKey: "AIzaSyC5dRvQZE1kMSsYojrMiyuQurnQwEleo3o",
-          projectId: "mourafik-e9161", // Using your ID
+          projectId: "mourafik-e9161",
           appId: "1:133465287328:web:9de5b3bd709099d885b7c5"
         };
         
-        // Init (Try/Catch to avoid blocking if firebase fails due to bad config)
         let db;
         try {
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
-        } catch(e) { console.log("Firebase Init Error (Local mode active)"); }
+        } catch(e) { console.log("Firebase Init Failed (Using Local Mode)"); }
 
-        // --- Data ---
-        let products = [
-            { id: 1, name: 'مصباح ذكي LED', price: 1500, old: 2000, cat: 'انارة', img: 'https://img.freepik.com/free-photo/glowing-light-bulb-dark-background_53876-104639.jpg?w=740', desc: 'تحكم بالهاتف', colors: ['أبيض'] },
-            { id: 2, name: 'ثريا كريستال', price: 18000, old: 22000, cat: 'ديكور', img: 'https://img.freepik.com/free-photo/expensive-ceiling-chandelier_157027-3965.jpg?w=740', desc: 'للمنازل الفخمة', colors: ['ذهبي', 'فضي'] },
-            { id: 3, name: 'مقبس كهربائي', price: 450, old: null, cat: 'كهرباء', img: 'https://img.freepik.com/free-photo/white-electric-switch_1122-3023.jpg?w=740', desc: 'آمن وعصري', colors: ['أبيض', 'رمادي'] },
-            { id: 4, name: 'كابل نحاسي 50م', price: 3000, old: 3500, cat: 'كابلات', img: 'https://img.freepik.com/free-photo/electrical-wire-background_1409-3221.jpg?w=740', desc: 'جودة عالية', colors: ['أسود'] },
-        ];
-        let orders = [];
-        let isAdmin = false;
-
-        // --- Functions Exposed to Window ---
-        window.toggleSidebar = () => {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        };
-
-        window.toggleAdmin = () => {
-            if(isAdmin) {
-                document.getElementById('app-container').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                renderOrdersAdmin();
-            } else {
-                document.getElementById('login-modal').style.display = 'flex';
+        // --- DATA STATE ---
+        const state = {
+            lang: 'ar',
+            products: [
+                {id: 1, name: 'LED Lamp Smart', name_ar: 'مصباح ذكي', cat: 'Lighting', price: 1500, old: 2000, desc: 'High quality smart lamp', imgs: ['https://via.placeholder.com/500/0044cc/fff?text=Lamp1', 'https://via.placeholder.com/500/ff9900/fff?text=Lamp2'], colors:['White', 'Yellow']},
+                {id: 2, name: 'Chandelier Royal', name_ar: 'ثريا ملكية', cat: 'Decor', price: 25000, old: 28000, desc: 'Luxury style', imgs: ['https://via.placeholder.com/500/333/fff?text=Chandelier'], colors:['Gold']},
+                {id: 3, name: 'Power Cable 100m', name_ar: 'كابل 100 متر', cat: 'Cables', price: 5000, old: null, desc: 'Cooper cable', imgs: ['https://via.placeholder.com/500/000/fff?text=Cable'], colors:['Black']}
+            ],
+            orders: [],
+            messages: [],
+            slider: [
+                'https://via.placeholder.com/1200x400/0044cc/fff?text=KahraLight+Offers',
+                'https://via.placeholder.com/1200x400/ff9900/fff?text=Best+Quality'
+            ],
+            tickerText: {
+                ar: 'مرحباً بكم في كهرالايت - توصيل لجميع الولايات',
+                fr: 'Bienvenue chez KahraLight - Livraison partout',
+                es: 'Bienvenido a KahraLight - Entrega a todos lados',
+                en: 'Welcome to KahraLight - Shipping Everywhere'
             }
         };
 
-        window.checkLogin = () => {
-            const u = document.getElementById('admin-user').value;
-            const p = document.getElementById('admin-pass').value;
-            if(u === 'admin' && p === 'abobob123') {
-                isAdmin = true;
-                document.getElementById('login-modal').style.display = 'none';
-                toggleAdmin();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
+        const translations = {
+            ar: { products: 'جميع المنتجات', categories: 'الفئات', contact: 'اتصل بنا', buy_now: 'شراء الآن', privacy:'الخصوصية', about:'من نحن', report:'ابلاغ', send:'ارسال', order_form:'استمارة الطلب' },
+            fr: { products: 'Tous les produits', categories: 'Catégories', contact: 'Contactez-nous', buy_now: 'Acheter', privacy:'Confidentialité', about:'À propos', report:'Signaler', send:'Envoyer', order_form:'Bon de commande' },
+            es: { products: 'Todos los productos', categories: 'Categorías', contact: 'Contáctenos', buy_now: 'Comprar', privacy:'Privacidad', about:'Sobre nosotros', report:'Reportar', send:'Enviar', order_form:'Formulario de pedido' },
+            en: { products: 'All Products', categories: 'Categories', contact: 'Contact Us', buy_now: 'Buy Now', privacy:'Privacy', about:'About', report:'Report', send:'Send', order_form:'Order Form' }
         };
 
-        window.logoutAdmin = () => {
-            isAdmin = false;
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
+        // --- GLOBAL EXPORTS ---
+        window.changeLang = (l) => {
+            state.lang = l;
+            document.documentElement.lang = l;
+            document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+            
+            // Ticker Direction
+            const ticker = document.querySelector('.ticker-content');
+            ticker.style.animation = l === 'ar' ? 'ticker-ltr 20s linear infinite' : 'ticker-rtl 20s linear infinite';
+            ticker.innerText = state.tickerText[l] || state.tickerText['en'];
+
+            // Update UI Text
+            document.querySelectorAll('[data-trans]').forEach(el => {
+                el.innerText = translations[l][el.dataset.trans];
+            });
+
+            renderProds();
         };
 
-        window.switchTab = (tab) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-'+tab).style.display = 'block';
-            event.target.classList.add('active');
-        };
-
-        // --- Rendering ---
-        window.renderProducts = (list = products) => {
-            const grid = document.getElementById('products-grid');
+        window.renderProds = (filterCat = null) => {
+            const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
+            const list = filterCat ? state.products.filter(p => p.cat === filterCat) : state.products;
+            
             list.forEach(p => {
-                const oldPriceHtml = p.old ? `<span class="p-old-price">${p.old} د.ج</span>` : '';
+                const name = state.lang === 'ar' ? (p.name_ar || p.name) : p.name;
                 grid.innerHTML += `
-                    <div class="product-card" onclick="openModal(${p.id})">
-                        <div class="p-img-box"><img src="${p.img}" class="p-img" loading="lazy"></div>
-                        <div class="p-details">
-                            <div class="p-cat">${p.cat}</div>
-                            <div class="p-title">${p.name}</div>
-                            <div class="p-price-row">
-                                <span class="p-price">${p.price} د.ج</span>
-                                ${oldPriceHtml}
-                            </div>
-                            <button class="btn-quick-add">عرض التفاصيل</button>
-                        </div>
+                <div class="product-card" onclick="openModal(${p.id})">
+                    <img src="${p.imgs[0]}" class="p-img">
+                    <div class="p-info">
+                        <div class="p-cat">${p.cat}</div>
+                        <div class="p-title">${name}</div>
+                        <div class="p-price">${p.price} DA ${p.old ? `<span class="old-price">${p.old}</span>` : ''}</div>
+                        <div class="stars">★★★★★</div>
                     </div>
-                `;
+                </div>`;
             });
         };
 
-        window.renderCats = () => {
-            const cats = [...new Set(products.map(p => p.cat))];
-            const ul = document.getElementById('category-list');
-            ul.innerHTML = `<li class="cat-item" onclick="filter('all'); toggleSidebar()">الكل <i class="fas fa-chevron-left"></i></li>`;
-            cats.forEach(c => {
-                ul.innerHTML += `<li class="cat-item" onclick="filter('${c}'); toggleSidebar()">${c} <i class="fas fa-chevron-left"></i></li>`;
-            });
-        };
-
-        window.filter = (cat) => {
-            if(cat === 'all') renderProducts(products);
-            else renderProducts(products.filter(p => p.cat === cat));
-        };
-
-        window.searchProduct = (q) => {
-            const filtered = products.filter(p => p.name.includes(q));
-            renderProducts(filtered);
-        };
-
-        // --- Modal & Order ---
-        let currentProd = null;
         window.openModal = (id) => {
-            currentProd = products.find(p => p.id === id);
-            document.getElementById('m-img').src = currentProd.img;
-            document.getElementById('m-title').innerText = currentProd.name;
-            document.getElementById('m-price').innerText = currentProd.price + ' د.ج';
-            document.getElementById('m-desc').innerText = currentProd.desc;
+            const p = state.products.find(x => x.id === id);
+            if(!p) return;
             
-            const sel = document.getElementById('order-color');
-            sel.innerHTML = '';
-            currentProd.colors.forEach(c => sel.innerHTML += `<option>${c}</option>`);
+            // URL Change Simulation
+            const slug = p.name.replace(/\s+/g, '-').toLowerCase();
+            window.history.pushState({}, '', `/product/${slug}`);
+
+            const name = state.lang === 'ar' ? (p.name_ar || p.name) : p.name;
+            document.getElementById('m-title').innerText = name;
+            document.getElementById('m-price').innerText = p.price + " DA";
+            document.getElementById('m-desc').innerText = p.desc;
             
-            document.getElementById('product-modal').style.display = 'block';
+            // Images
+            const mainImg = document.getElementById('m-main-img');
+            const thumbs = document.getElementById('m-thumbs');
+            mainImg.src = p.imgs[0];
+            thumbs.innerHTML = '';
+            p.imgs.forEach(img => {
+                thumbs.innerHTML += `<img src="${img}" class="thumb" onclick="document.getElementById('m-main-img').src='${img}'">`;
+            });
+
+            // Colors
+            const colorSel = document.getElementById('order-color');
+            colorSel.innerHTML = '';
+            if(p.colors) p.colors.forEach(c => colorSel.innerHTML += `<option>${c}</option>`);
+
+            window.currentPid = id;
+            document.getElementById('prod-modal').style.display = 'block';
         };
 
-        window.closeModal = () => document.getElementById('product-modal').style.display = 'none';
+        window.closeModal = () => {
+            document.getElementById('prod-modal').style.display = 'none';
+            window.history.pushState({}, '', '/');
+        };
 
-        window.submitOrder = async () => {
+        window.placeOrder = async () => {
+            const p = state.products.find(x => x.id === window.currentPid);
             const order = {
-                prod: currentProd.name,
-                price: currentProd.price,
+                product: p.name,
+                price: p.price,
                 qty: document.getElementById('order-qty').value,
-                cust: document.getElementById('cust-name').value,
-                phone: document.getElementById('cust-phone').value,
-                addr: document.getElementById('cust-address').value,
-                date: new Date().toLocaleString()
+                color: document.getElementById('order-color').value,
+                name: document.getElementById('c-name').value,
+                phone: document.getElementById('c-phone').value,
+                country: document.getElementById('c-country').value,
+                address: document.getElementById('c-addr').value,
+                date: new Date().toISOString().split('T')[0]
             };
 
-            if(!order.cust || !order.phone) { alert('يرجى ملء الاسم والهاتف'); return; }
+            if(!order.name || !order.phone) return alert('Required fields missing');
 
-            // Local save
-            orders.unshift(order);
-            document.getElementById('stat-orders').innerText = orders.length;
-
-            // Animation
-            const btn = document.querySelector('.btn-buy');
-            btn.innerHTML = '<i class="fas fa-check"></i> تم الطلب!';
-            btn.style.background = '#4CAF50';
-            btn.style.color = '#fff';
-
-            // Firebase save
-            if(db) {
-                try { await addDoc(collection(db, "orders"), order); } catch(e){}
-            }
-
-            setTimeout(() => {
-                closeModal();
-                btn.innerHTML = 'تأكيد الطلب';
-                btn.style.background = 'var(--primary-orange)';
-                btn.style.color = '#000';
-            }, 2000);
+            // Firebase Save
+            if(db) await addDoc(collection(db, 'orders'), order);
+            state.orders.unshift(order); // Local Update
+            
+            closeModal();
+            const succ = document.getElementById('success-anim');
+            succ.style.display = 'flex';
+            setTimeout(() => succ.style.display = 'none', 2500);
+            updateAdminStats();
         };
 
-        // --- Admin Functions ---
-        window.renderOrdersAdmin = () => {
-            const tbody = document.getElementById('orders-list-body');
-            tbody.innerHTML = '';
-            orders.forEach(o => {
-                tbody.innerHTML += `
-                    <tr style="border-bottom:1px solid #ddd;">
-                        <td style="padding:10px;">${o.cust}<br><small>${o.phone}</small></td>
-                        <td style="padding:10px;">${o.prod} (x${o.qty})</td>
-                        <td style="padding:10px; font-weight:bold;">${o.price * o.qty}</td>
-                    </tr>
-                `;
-            });
+        window.submitReport = (e) => {
+            e.preventDefault();
+            const msg = {
+                name: document.getElementById('rep-name').value,
+                email: document.getElementById('rep-email').value,
+                msg: document.getElementById('rep-msg').value
+            };
+            state.messages.push(msg);
+            alert('تم الارسال / Sent');
+            e.target.reset();
+        };
+
+        // --- ADMIN ---
+        window.toggleAdmin = () => {
+             // Simple Check if already logged in (simulated by visibility)
+             if(document.getElementById('admin-panel').style.display === 'block'){
+                 document.getElementById('admin-panel').style.display = 'none';
+                 document.getElementById('app-view').style.display = 'block';
+             } else {
+                 document.getElementById('admin-login').style.display = 'flex';
+             }
+        };
+
+        window.loginAdmin = () => {
+            const u = document.getElementById('adm-user').value;
+            const p = document.getElementById('adm-pass').value;
+            if(u === 'admin' && p === 'abobob123') {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('app-view').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                updateAdminStats();
+                renderAdminTables();
+            } else {
+                document.getElementById('login-err').style.display = 'block';
+            }
+        };
+
+        window.logout = () => window.location.reload();
+
+        window.tab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.admin-tabs button').forEach(e => e.classList.remove('active'));
+            document.getElementById('tab-'+t).classList.add('active');
+            event.target.classList.add('active');
         };
 
         window.addProduct = () => {
             const p = {
                 id: Date.now(),
-                name: document.getElementById('new-p-name').value,
-                price: document.getElementById('new-p-price').value,
-                cat: document.getElementById('new-p-cat').value,
-                img: document.getElementById('new-p-img').value || 'https://via.placeholder.com/300',
-                desc: document.getElementById('new-p-desc').value,
-                colors: []
+                name: document.getElementById('n-name').value,
+                cat: document.getElementById('n-cat').value,
+                price: document.getElementById('n-price').value,
+                old: document.getElementById('n-old').value,
+                desc: document.getElementById('n-desc').value,
+                imgs: document.getElementById('n-img').value.split(','),
+                colors: document.getElementById('n-colors').value.split(',')
             };
-            products.push(p);
-            alert('تمت الاضافة');
-            renderProducts();
-            renderCats();
+            state.products.push(p);
+            alert('Saved');
+            renderProds();
         };
 
-        window.updateTickerText = () => {
-            const t = document.getElementById('ticker-input').value;
-            if(t) document.getElementById('news-ticker').innerText = t;
-            alert('تم التحديث');
+        window.importCSV = () => {
+            const file = document.getElementById('csvFile').files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const lines = e.target.result.split('\n');
+                lines.forEach((line, i) => {
+                    if(i>0 && line.length > 5) {
+                        const col = line.split(',');
+                        state.products.push({
+                            id: Date.now()+i, name: col[0], cat: col[1], price: col[2], desc: col[3], imgs: ['https://via.placeholder.com/300'], colors:[]
+                        });
+                    }
+                });
+                alert('Imported ' + (lines.length-1) + ' products');
+                renderProds();
+            };
+            reader.readAsText(file);
         };
 
-        // --- Init Ticker Animation & Slider ---
-        window.onload = () => {
-            renderProducts();
-            renderCats();
+        window.changeTheme = (cls) => {
+            document.body.className = cls;
+        };
 
-            // Slider Logic
-            const imgs = [
-                'https://cdn.shopify.com/s/files/1/0070/7032/files/lighting-banner.jpg?v=1588622765', // Example banner
-                'https://cdn.shopify.com/s/files/1/0070/7032/files/banner-2.jpg?v=1588622765'
-            ];
-            const slider = document.getElementById('hero-slider');
-            imgs.forEach((src, i) => {
-                const img = document.createElement('img');
-                img.className = i===0 ? 'slide active' : 'slide';
-                img.src = src;
-                slider.appendChild(img);
+        window.updateTicker = () => {
+            const txt = document.getElementById('set-ticker').value;
+            if(txt) state.tickerText[state.lang] = txt;
+            changeLang(state.lang); // refresh
+        };
+
+        function renderAdminTables() {
+            // Orders
+            const ob = document.getElementById('admin-orders-body');
+            ob.innerHTML = '';
+            state.orders.forEach(o => {
+                ob.innerHTML += `<tr><td>${o.date}</td><td>${o.name}<br>${o.phone}</td><td>${o.product}</td><td>${o.country}</td></tr>`;
             });
-            let sIdx = 0;
-            setInterval(() => {
-                document.querySelectorAll('.slide')[sIdx].classList.remove('active');
-                sIdx = (sIdx+1)%imgs.length;
-                document.querySelectorAll('.slide')[sIdx].classList.add('active');
-            }, 4000);
+            // Messages
+            const mb = document.getElementById('admin-msg-body');
+            mb.innerHTML = '';
+            state.messages.forEach(m => {
+                mb.innerHTML += `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.msg}</td></tr>`;
+            });
+            
+            // Products List (Simple)
+            const pl = document.getElementById('admin-prod-list');
+            pl.innerHTML = '';
+            state.products.forEach(p => {
+                pl.innerHTML += `<div style="padding:5px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;"><span>${p.name}</span> <button onclick="state.products = state.products.filter(x=>x.id!=${p.id}); renderAdminTables();" style="color:red">Delete</button></div>`;
+            });
+        }
 
-            // Ticker Animation Injection (Left to Right for Arabic as requested)
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes tickerMove {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(100%); }
-                }
-                .ticker { animation: tickerMove 15s linear infinite; left: 0; min-width: 100%; }
-            `;
-            document.head.appendChild(style);
-        };
+        function updateAdminStats() {
+            document.getElementById('st-new').innerText = state.orders.length;
+            document.getElementById('st-total').innerText = state.orders.reduce((sum, o) => sum + (o.price * o.qty), 0) + ' DA';
+        }
+
+        // --- INIT ---
+        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
+        
+        // Initial Logic
+        const sliderDiv = document.getElementById('slider');
+        state.slider.forEach((src, i) => {
+            sliderDiv.innerHTML += `<img src="${src}" class="slide ${i===0?'active':''}">`;
+        });
+        
+        let sIdx = 0;
+        setInterval(() => {
+            const slides = document.querySelectorAll('.slide');
+            slides[sIdx].classList.remove('active');
+            sIdx = (sIdx + 1) % slides.length;
+            slides[sIdx].classList.add('active');
+        }, 3500);
+
+        // Render Cats
+        const cats = [...new Set(state.products.map(p => p.cat))];
+        const clist = document.getElementById('cat-list');
+        cats.forEach(c => clist.innerHTML += `<div class="cat-link" onclick="renderProds('${c}'); toggleSidebar()">${c}</div>`);
+        clist.innerHTML += `<div class="cat-link" onclick="renderProds(); toggleSidebar()">All</div>`;
+
+        // Start
+        changeLang('ar');
+
     </script>
 </body>
 </html>
