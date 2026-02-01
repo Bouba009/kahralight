@@ -31,49 +31,43 @@
         ul { list-style: none; }
         img { max-width: 100%; display: block; }
 
-        /* --- Header --- */
+        /* Header */
         header { background: var(--bg-card); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 900; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-size: 26px; font-weight: 900; }
         .logo span:first-child { color: var(--primary); }
         .logo span:last-child { color: var(--secondary); text-shadow: 0 0 10px var(--secondary); }
-        
         .search-box { flex: 1; margin: 0 20px; max-width: 500px; display: none; }
         @media(min-width: 768px) { .search-box { display: block; } }
         .search-box input { width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; background: #f9f9f9; }
-
         .nav-tools { display: flex; gap: 15px; align-items: center; }
         .lang-select { border: 1px solid #ddd; padding: 5px; border-radius: 5px; background: var(--bg-card); color: var(--text-main); font-size: 14px; cursor: pointer; }
         .icon-btn { font-size: 1.2rem; cursor: pointer; position: relative; }
         .badge { position: absolute; top: -8px; right: -8px; background: red; color: white; font-size: 10px; padding: 3px 6px; border-radius: 50%; }
 
-        /* --- Sidebar --- */
+        /* Sidebar */
         .sidebar { position: fixed; top: 0; width: 280px; height: 100%; background: var(--bg-card); z-index: 1000; padding: 20px; transition: 0.3s; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
         html[dir="rtl"] .sidebar { right: -290px; } html[dir="rtl"] .sidebar.active { right: 0; }
         html[dir="ltr"] .sidebar { left: -290px; } html[dir="ltr"] .sidebar.active { left: 0; }
-        
         .cat-link { padding: 12px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; display:flex; justify-content:space-between; }
         .cat-link:hover { background: var(--primary); color: #fff; }
 
-        /* --- Pages Management --- */
+        /* Pages */
         .page-section { display: none; min-height: 80vh; animation: fadeIn 0.4s; }
         .page-section.active { display: block; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-        /* --- Slider --- */
+        /* Slider & Ticker */
         .hero-slider { height: 250px; position: relative; overflow: hidden; }
         @media(min-width: 768px) { .hero-slider { height: 450px; } }
         .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; }
         .slide.active { opacity: 1; }
-
-        /* --- Ticker --- */
         .ticker-wrap { background: var(--ticker-bg); overflow: hidden; height: 45px; display: flex; align-items: center; border-bottom: 1px solid #ddd; }
         .ticker-content { white-space: nowrap; font-weight: 800; color: #000; font-size: 15px; display: inline-block; padding-left: 100%; }
         
-        /* --- Products Grid --- */
+        /* Product Grid */
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 30px; } }
-
         .product-card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; cursor: pointer; position: relative; border: 1px solid rgba(0,0,0,0.05); }
         .product-card:hover { transform: translateY(-7px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .p-img { width: 100%; height: 200px; object-fit: contain; background: #fff; padding: 10px; }
@@ -82,58 +76,42 @@
         .p-title { font-weight: 700; margin: 5px 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .p-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
         
-        /* --- Product Page (Not Floating) --- */
+        /* Full Product Page */
         #product-full-page { background: var(--bg-card); padding-top: 20px; }
         .prod-container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; padding: 20px; }
         @media(min-width: 768px) { .prod-container { flex-direction: row; } }
-        
         .prod-gallery { flex: 1.2; background: #fff; border-radius: 10px; overflow: hidden; position: relative; }
         .main-view-img { width: 100%; height: auto; max-height: 500px; object-fit: contain; }
         .thumbs-row { display: flex; gap: 10px; padding: 10px; overflow-x: auto; }
         .thumb-img { width: 70px; height: 70px; border: 2px solid #eee; border-radius: 5px; cursor: pointer; object-fit: cover; }
-        .thumb-img.active { border-color: var(--primary); }
-
         .prod-details { flex: 1; padding: 10px; }
-        .back-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 20px; font-weight: bold; color: var(--text-sub); }
-        .prod-title { font-size: 2rem; font-weight: 900; margin-bottom: 10px; }
-        .prod-price { font-size: 1.8rem; color: var(--secondary); font-weight: bold; margin-bottom: 20px; }
-        .prod-desc { color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; font-size: 1.1rem; }
-        
-        .action-area { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-top: 20px; }
-        .form-row { margin-bottom: 15px; }
-        .form-row label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        .form-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; }
         .btn-main { width: 100%; padding: 15px; background: var(--primary); color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: 0.3s; }
         .btn-main:hover { background: var(--secondary); }
 
-        /* --- Footer Professional --- */
+        /* Footer */
         footer { background: #111; color: #bbb; padding: 60px 20px 20px; margin-top: 50px; font-size: 14px; }
         .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
         .footer-col h3 { color: #fff; margin-bottom: 20px; font-size: 18px; border-bottom: 2px solid var(--secondary); display: inline-block; padding-bottom: 5px; }
-        .footer-links a { display: block; margin-bottom: 10px; color: #bbb; transition: 0.3s; }
-        .footer-links a:hover { color: var(--secondary); padding-inline-start: 5px; }
-        .social-icons a { margin-inline-end: 15px; font-size: 18px; color: #fff; }
         .footer-form input, .footer-form textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; border: 1px solid #333; color: #fff; border-radius: 4px; }
         .footer-bottom { border-top: 1px solid #333; margin-top: 50px; padding-top: 20px; text-align: center; }
 
-        /* --- ADMIN PANEL --- */
+        /* Admin */
         .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 5000; display: none; align-items: center; justify-content: center; }
         #admin-panel { display: none; min-height: 100vh; background: #f1f5f9; }
         .admin-nav { background: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; }
         .stat-card { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 4px solid var(--primary); }
-        .stat-val { font-size: 2.5rem; font-weight: bold; color: var(--text-main); }
-        .stat-label { color: var(--text-sub); font-size: 1rem; }
-
-        .admin-content { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; }
+        .admin-content { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; display: none; }
         .admin-content.active { display: block; }
-        
         .admin-tabs { display: flex; justify-content: center; gap: 10px; padding: 20px 0; background: #fff; }
         .tab-btn { padding: 10px 25px; border: none; background: #e2e8f0; border-radius: 20px; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: #fff; }
+        
+        .form-row { margin-bottom: 15px; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
+        label { font-weight: bold; font-size: 13px; }
 
-        /* Animations */
+        /* Anim */
         @keyframes ticker-rtl { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes ticker-ltr { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         .check-anim { font-size: 80px; color: #2ecc71; animation: pop 0.5s; }
@@ -149,11 +127,9 @@
             <div class="icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
             <div class="logo"><span>Kahra</span><span>Light</span></div>
         </div>
-
         <div class="search-box">
             <input type="text" id="searchInput" onkeyup="renderProds(null, this.value)" placeholder="Search...">
         </div>
-
         <div class="nav-tools">
             <select class="lang-select" onchange="changeLang(this.value)">
                 <option value="ar">🇩🇿 العربية</option>
@@ -175,42 +151,25 @@
         <div id="cat-list"></div>
     </div>
 
-    <!-- MAIN HOME PAGE -->
+    <!-- HOME PAGE -->
     <div id="page-home" class="page-section active">
-        <!-- Slider -->
         <div class="hero-slider" id="slider-container"></div>
-        
-        <!-- Ticker -->
-        <div class="ticker-wrap">
-            <div class="ticker-content" id="ticker-text"></div>
-        </div>
-
-        <!-- Products -->
+        <div class="ticker-wrap"><div class="ticker-content" id="ticker-text"></div></div>
         <div class="container">
-            <h2 style="margin-bottom: 25px; border-inline-start: 5px solid var(--secondary); padding-inline-start: 10px;" data-key="all_products">All Products</h2>
+            <h2 style="margin-bottom: 25px;" data-key="all_products">All Products</h2>
             <div class="grid" id="product-grid"></div>
         </div>
-
-        <!-- Footer -->
         <footer>
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 data-key="about">About Us</h3>
-                    <p data-key="about_text" style="line-height:1.6;">KahraLight is your #1 source for electrical supplies. High quality, best prices, and international shipping.</p>
-                    <div class="social-icons" style="margin-top:15px;">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
+                    <p data-key="about_text">KahraLight is your #1 source for electrical supplies.</p>
                 </div>
                 <div class="footer-col">
                     <h3 data-key="links">Quick Links</h3>
-                    <div class="footer-links">
-                        <a href="#" data-key="home">Home</a>
-                        <a href="#" data-key="privacy">Privacy Policy</a>
-                        <a href="#" data-key="contact">Contact Us</a>
-                        <a href="#" data-key="conditions">Terms & Conditions</a>
-                    </div>
+                    <a href="#" data-key="home">Home</a>
+                    <a href="#" data-key="privacy">Privacy Policy</a>
+                    <a href="#" data-key="contact">Contact Us</a>
                 </div>
                 <div class="footer-col">
                     <h3 data-key="report">Report a Problem</h3>
@@ -222,16 +181,14 @@
                     </form>
                 </div>
             </div>
-            <div class="footer-bottom">
-                &copy; 2024 KahraLight Store. All Rights Reserved.
-            </div>
+            <div class="footer-bottom">&copy; 2024 KahraLight Store.</div>
         </footer>
     </div>
 
-    <!-- PRODUCT FULL PAGE (SPA Style) -->
+    <!-- PRODUCT PAGE -->
     <div id="page-product" class="page-section">
         <div class="container">
-            <div class="back-btn" onclick="showPage('home')">
+            <div style="margin-bottom:20px; cursor:pointer; font-weight:bold;" onclick="showPage('home')">
                 <i class="fas fa-arrow-left"></i> <span data-key="back">Back</span>
             </div>
             <div class="prod-container">
@@ -245,44 +202,24 @@
                     <div class="prod-price" id="view-price"></div>
                     <div class="prod-desc" id="view-desc"></div>
                     
-                    <div style="margin: 20px 0; display:flex; gap:15px;">
-                        <a href="#" style="color:var(--primary); text-decoration:underline;"><i class="fas fa-file-pdf"></i> Fiche Technique</a>
-                        <a href="#" style="color:var(--primary); text-decoration:underline;"><i class="fas fa-certificate"></i> Certificat Export</a>
-                    </div>
+                    <!-- DOCS LINKS -->
+                    <div id="doc-links" style="margin: 20px 0; display:flex; gap:15px;"></div>
 
-                    <div class="action-area">
+                    <div style="background:#f9f9f9; padding:20px; border-radius:10px; margin-top:20px;">
                         <h3 style="margin-bottom:15px;" data-key="order_form">Order Form</h3>
                         <div class="form-row" style="display:flex; gap:10px;">
-                            <div style="flex:1">
-                                <label data-key="qty">Quantity</label>
-                                <input type="number" id="ord-qty" value="1" min="1" class="form-input">
-                            </div>
-                            <div style="flex:1">
-                                <label data-key="color">Color</label>
-                                <select id="ord-color" class="form-input"></select>
-                            </div>
+                            <div style="flex:1"><label data-key="qty">Quantity</label><input type="number" id="ord-qty" value="1" min="1" class="form-input"></div>
+                            <div style="flex:1"><label data-key="color">Color</label><select id="ord-color" class="form-input"></select></div>
                         </div>
-                        <div class="form-row">
-                            <label data-key="name">Full Name</label>
-                            <input type="text" id="ord-name" class="form-input">
-                        </div>
-                        <div class="form-row">
-                            <label data-key="phone">Phone Number</label>
-                            <input type="tel" id="ord-phone" class="form-input">
-                        </div>
-                        <div class="form-row">
-                            <label data-key="country">Country</label>
-                            <select id="ord-country" class="form-input">
-                                <option value="Algeria">Algeria 🇩🇿</option>
-                                <option value="Spain">Spain 🇪🇸</option>
-                                <option value="France">France 🇫🇷</option>
-                                <option value="Portugal">Portugal 🇵🇹</option>
-                            </select>
-                        </div>
-                        <div class="form-row">
-                            <label data-key="address">Address</label>
-                            <textarea id="ord-addr" class="form-input"></textarea>
-                        </div>
+                        <input type="text" id="ord-name" placeholder="Full Name" class="form-input" style="margin-bottom:10px;">
+                        <input type="tel" id="ord-phone" placeholder="Phone" class="form-input" style="margin-bottom:10px;">
+                        <select id="ord-country" class="form-input" style="margin-bottom:10px;">
+                            <option value="Algeria">Algeria 🇩🇿</option>
+                            <option value="Spain">Spain 🇪🇸</option>
+                            <option value="France">France 🇫🇷</option>
+                            <option value="Portugal">Portugal 🇵🇹</option>
+                        </select>
+                        <textarea id="ord-addr" placeholder="Address" class="form-input" style="margin-bottom:10px;"></textarea>
                         <button class="btn-main" onclick="submitOrder()" data-key="buy_now">Confirm Order</button>
                     </div>
                 </div>
@@ -290,34 +227,33 @@
         </div>
     </div>
 
-    <!-- Success Overlay -->
+    <!-- SUCCESS -->
     <div id="success-overlay" class="admin-overlay" style="background:rgba(255,255,255,0.95); flex-direction:column;">
         <i class="fas fa-check-circle check-anim"></i>
-        <h2 style="margin-top:20px; color:#333;" data-key="success_order">Order Successful!</h2>
+        <h2 style="margin-top:20px;" data-key="success_order">Order Successful!</h2>
     </div>
 
     <!-- ADMIN LOGIN -->
     <div id="admin-login" class="admin-overlay">
         <div style="background:#fff; padding:40px; border-radius:12px; box-shadow:0 5px 20px rgba(0,0,0,0.1); width:90%; max-width:350px; text-align:center;">
-            <h2 style="color:var(--primary); margin-bottom:20px;">Admin Access</h2>
-            <input type="text" id="adm-user" placeholder="Username" class="form-input" style="margin-bottom:10px;">
-            <input type="password" id="adm-pass" placeholder="Password" class="form-input" style="margin-bottom:20px;">
-            <button onclick="login()" class="btn-main">Login</button>
-            <p id="login-msg" style="color:red; margin-top:10px; display:none;">Invalid Credentials</p>
-            <button onclick="document.getElementById('admin-login').style.display='none'" style="background:none; border:none; margin-top:15px; text-decoration:underline; cursor:pointer;">Cancel</button>
+            <h2 style="color:var(--primary); margin-bottom:20px;">Admin</h2>
+            <input type="text" id="adm-user" placeholder="Username" class="form-input">
+            <input type="password" id="adm-pass" placeholder="Password" class="form-input">
+            <button onclick="login()" class="btn-main" style="margin-top:15px;">Login</button>
+            <p id="login-msg" style="color:red; margin-top:10px; display:none;">Error</p>
+            <button onclick="document.getElementById('admin-login').style.display='none'" style="background:none; border:none; margin-top:15px; text-decoration:underline;">Cancel</button>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
+    <!-- ADMIN PANEL -->
     <div id="admin-panel">
         <div class="admin-nav">
             <h3>Admin Dashboard</h3>
             <div>
-                <button onclick="logout()" style="background:#e74c3c; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;">Logout</button>
-                <button onclick="closeAdmin()" style="background:#34495e; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;">View Store</button>
+                <button onclick="logout()" style="background:#e74c3c; color:#fff; padding:8px 15px; border:none; border-radius:5px;">Logout</button>
+                <button onclick="closeAdmin()" style="background:#34495e; color:#fff; padding:8px 15px; border:none; border-radius:5px;">Store</button>
             </div>
         </div>
-
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="switchTab('dash')">Dashboard</button>
             <button class="tab-btn" onclick="switchTab('products')">Products</button>
@@ -325,52 +261,60 @@
             <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
         </div>
 
-        <!-- Dashboard Stats -->
-        <div id="tab-dash" class="admin-content active" style="background:transparent; box-shadow:none; padding:0;">
+        <!-- Dashboard -->
+        <div id="tab-dash" class="admin-content active">
             <div class="dashboard-grid">
-                <div class="stat-card">
-                    <div class="stat-val" id="st-visits">0</div>
-                    <div class="stat-label">Total Visits</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" id="st-today">0</div>
-                    <div class="stat-label">Visits Today</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" id="st-orders">0</div>
-                    <div class="stat-label">New Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" id="st-revenue">0</div>
-                    <div class="stat-label">Total Revenue</div>
-                </div>
+                <div class="stat-card"><div class="stat-val" id="st-visits">0</div><div>Visits</div></div>
+                <div class="stat-card"><div class="stat-val" id="st-today">0</div><div>Today</div></div>
+                <div class="stat-card"><div class="stat-val" id="st-orders">0</div><div>Orders</div></div>
+                <div class="stat-card"><div class="stat-val" id="st-total">0</div><div>Total</div></div>
             </div>
         </div>
 
-        <!-- Products Management -->
+        <!-- Products -->
         <div id="tab-products" class="admin-content">
             <h3>Manage Products</h3>
+            
+            <!-- CSV IMPORT -->
+            <div style="background:#e8f4fd; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #bde0fe;">
+                <h4>Import CSV</h4>
+                <input type="file" id="csv-file" accept=".csv" style="margin-top:5px;">
+                <button onclick="importCSV()" style="padding:5px 10px;">Upload CSV</button>
+            </div>
+
+            <!-- PRODUCT FORM -->
             <div style="background:#f8fafc; padding:20px; border-radius:10px; margin-bottom:20px; border:1px solid #e2e8f0;">
                 <input type="hidden" id="edit-id">
-                <div class="form-row">
-                    <input type="text" id="np-name" placeholder="Product Name (Main)" class="form-input">
+                <label>Basic Info</label>
+                <div class="form-row" style="display:flex; gap:10px;">
+                    <input type="text" id="np-name" placeholder="Product Name" class="form-input">
+                    <input type="text" id="np-cat" placeholder="Category" class="form-input">
                 </div>
                 <div class="form-row" style="display:flex; gap:10px;">
-                    <input type="number" id="np-price-dz" placeholder="Price (DZD)" class="form-input">
-                    <input type="number" id="np-price-eu" placeholder="Price (Euro)" class="form-input">
+                    <input type="number" id="np-price-dz" placeholder="Price DA" class="form-input">
+                    <input type="number" id="np-price-eu" placeholder="Price €" class="form-input">
                 </div>
-                <div class="form-row" style="display:flex; gap:10px;">
-                     <input type="text" id="np-cat" placeholder="Category" class="form-input">
-                     <input type="text" id="np-colors" placeholder="Colors (comma separated)" class="form-input">
+                <label>Details</label>
+                <textarea id="np-desc" placeholder="Description" class="form-input"></textarea>
+                <input type="text" id="np-colors" placeholder="Colors (red, blue...)" class="form-input">
+                
+                <label style="margin-top:10px; display:block;">Images & Files (URLs or Uploads)</label>
+                <input type="text" id="np-img" placeholder="Image URL 1, Image URL 2..." class="form-input">
+                <input type="file" id="np-img-file" class="form-input" multiple>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <div style="flex:1">
+                        <label>Export Cert.</label>
+                        <input type="file" id="np-cert-file" class="form-input">
+                    </div>
+                    <div style="flex:1">
+                        <label>Fiche Tech.</label>
+                        <input type="file" id="np-fiche-file" class="form-input">
+                    </div>
                 </div>
-                <div class="form-row">
-                    <textarea id="np-desc" placeholder="Description" class="form-input"></textarea>
-                </div>
-                <div class="form-row">
-                    <input type="text" id="np-img" placeholder="Images URLs (comma separated)" class="form-input">
-                </div>
-                <button onclick="saveProduct()" class="btn-main" style="background:#27ae60;">Save / Update Product</button>
-                <button onclick="clearForm()" style="margin-top:10px; background:#95a5a6; border:none; padding:10px; color:#fff; border-radius:5px; cursor:pointer;">Clear Form</button>
+
+                <button onclick="saveProduct()" class="btn-main" style="background:#27ae60; margin-top:20px;">Save Product</button>
+                <button onclick="clearForm()" style="margin-top:10px; width:100%; background:#95a5a6; border:none; padding:10px; color:#fff; cursor:pointer;">Clear / New</button>
             </div>
             
             <div id="admin-prod-list"></div>
@@ -381,9 +325,7 @@
             <h3>Recent Orders</h3>
             <div style="overflow-x:auto;">
                 <table style="width:100%; border-collapse:collapse; margin-top:15px;">
-                    <thead style="background:#f1f1f1;">
-                        <tr><th style="padding:10px;">Date</th><th>Customer</th><th>Product</th><th>Price</th><th>Action</th></tr>
-                    </thead>
+                    <thead style="background:#f1f1f1;"><tr><th style="padding:10px;">Date</th><th>Customer</th><th>Product</th><th>Price</th></tr></thead>
                     <tbody id="admin-orders-table"></tbody>
                 </table>
             </div>
@@ -392,38 +334,33 @@
         <!-- Settings -->
         <div id="tab-settings" class="admin-content">
             <h3>Global Settings</h3>
-            <div class="form-row">
-                <label>Store Theme (Applies to All Users)</label>
-                <select id="set-theme" class="form-input" onchange="updateGlobalSettings()">
-                    <option value="default">Default (Blue/Orange)</option>
-                    <option value="theme-dark-blue">Dark Blue Mode</option>
-                    <option value="theme-orange-blue">Orange Primary</option>
-                    <option value="theme-yellow-white">Yellow & White</option>
-                </select>
-            </div>
+            <p style="font-size:12px; color:red;">* Changes here will affect ALL users.</p>
+            <label>Theme</label>
+            <select id="set-theme" class="form-input" onchange="saveGlobalSettings()">
+                <option value="default">Default</option>
+                <option value="theme-dark-blue">Dark Blue</option>
+                <option value="theme-orange-blue">Orange Primary</option>
+                <option value="theme-yellow-white">Yellow/White</option>
+            </select>
             
-            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
-            <h3>Ticker Text (Auto Translate Simulation)</h3>
-            <p style="font-size:12px; color:#666; margin-bottom:10px;">Enter text for each language:</p>
-            <div class="form-row"><input type="text" id="tick-ar" placeholder="Arabic Text" class="form-input"></div>
-            <div class="form-row"><input type="text" id="tick-fr" placeholder="French Text" class="form-input"></div>
-            <div class="form-row"><input type="text" id="tick-es" placeholder="Spanish Text" class="form-input"></div>
-            <div class="form-row"><input type="text" id="tick-en" placeholder="English Text" class="form-input"></div>
-            <button onclick="updateGlobalSettings()" class="btn-main">Save All Settings</button>
-
-            <hr style="margin:20px 0;">
-            <h3>Slider Images</h3>
-            <div class="form-row">
-                <input type="text" id="slider-url" placeholder="Image URL" class="form-input">
-                <button onclick="addSlideImg()" style="margin-top:5px; padding:10px; background:#333; color:#fff; border:none; border-radius:5px;">Add Slide</button>
-            </div>
+            <h4 style="margin-top:20px;">Ticker Text</h4>
+            <input type="text" id="tick-ar" placeholder="Arabic" class="form-input">
+            <input type="text" id="tick-fr" placeholder="French" class="form-input">
+            <input type="text" id="tick-es" placeholder="Spanish" class="form-input">
+            <input type="text" id="tick-en" placeholder="English" class="form-input">
+            
+            <button onclick="saveGlobalSettings()" class="btn-main" style="margin-top:15px;">Update All Users</button>
+            
+            <h4 style="margin-top:20px;">Slider Images</h4>
+            <input type="text" id="slider-url" placeholder="Image URL" class="form-input">
+            <button onclick="addSlideImg()" style="padding:10px; margin-top:5px;">Add Slide</button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         // FIREBASE CONFIG
         const firebaseConfig = {
@@ -432,396 +369,283 @@
           appId: "1:133465287328:web:9de5b3bd709099d885b7c5"
         };
 
-        // Init Firebase
         let db;
         try {
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
-        } catch(e) { console.error("Firebase Fallback", e); }
+            console.log("Firebase Connected");
+        } catch(e) { console.error("Firebase Error", e); }
 
         // STATE
-        let currentState = {
+        let state = {
             lang: 'ar',
             currency: 'DA',
             products: [],
             orders: [],
             settings: {
                 theme: 'default',
-                slider: ['https://via.placeholder.com/1200x400/0044cc/ffffff?text=KahraLight+Promo', 'https://via.placeholder.com/1200x400/ff9900/ffffff?text=New+Collection'],
-                ticker: {
-                    ar: 'مرحبا بكم في كهرالايت - أفضل المنتجات',
-                    fr: 'Bienvenue chez KahraLight',
-                    es: 'Bienvenido a KahraLight',
-                    en: 'Welcome to KahraLight Store'
-                }
+                slider: ['https://via.placeholder.com/1200x400/0044cc/fff?text=Kahra', 'https://via.placeholder.com/1200x400/ff9900/fff?text=Light'],
+                ticker: { ar: 'مرحبا', fr: 'Bienvenue', es: 'Hola', en: 'Welcome' }
             },
-            visits: 1250 // Simulated base visits
+            visits: 100
         };
 
-        // DICTIONARY
         const i18n = {
-            ar: { categories: 'الفئات', all_products: 'جميع المنتجات', about: 'من نحن', about_text: 'كهرالايت هو مصدرك الأول لمستلزمات الكهرباء.', links: 'روابط', home: 'الرئيسية', privacy: 'الخصوصية', contact: 'اتصل بنا', conditions: 'الشروط والأحكام', report: 'ابلاغ عن مشكل', send: 'ارسال', back: 'عودة', order_form: 'استمارة الطلب', qty: 'الكمية', color: 'اللون', name: 'الاسم الكامل', phone: 'رقم الهاتف', country: 'البلد', address: 'العنوان', buy_now: 'تأكيد الطلب', success_order: 'تم استلام طلبك بنجاح!', search: 'بحث...' },
-            fr: { categories: 'Catégories', all_products: 'Tous les produits', about: 'À propos', about_text: 'Votre source n°1 pour l\'électricité.', links: 'Liens', home: 'Accueil', privacy: 'Confidentialité', contact: 'Contact', conditions: 'Conditions', report: 'Signaler un problème', send: 'Envoyer', back: 'Retour', order_form: 'Bon de commande', qty: 'Quantité', color: 'Couleur', name: 'Nom complet', phone: 'Téléphone', country: 'Pays', address: 'Adresse', buy_now: 'Confirmer la commande', success_order: 'Commande réussie!', search: 'Rechercher...' },
-            es: { categories: 'Categorías', all_products: 'Todos los productos', about: 'Sobre nosotros', about_text: 'Su fuente n.º 1 de suministros eléctricos.', links: 'Enlaces', home: 'Inicio', privacy: 'Privacidad', contact: 'Contacto', conditions: 'Condiciones', report: 'Reportar problema', send: 'Enviar', back: 'Volver', order_form: 'Formulario de pedido', qty: 'Cantidad', color: 'Color', name: 'Nombre completo', phone: 'Teléfono', country: 'País', address: 'Dirección', buy_now: 'Confirmar pedido', success_order: '¡Pedido exitoso!', search: 'Buscar...' },
-            en: { categories: 'Categories', all_products: 'All Products', about: 'About Us', about_text: 'Your #1 source for electrical supplies.', links: 'Links', home: 'Home', privacy: 'Privacy', contact: 'Contact', conditions: 'Conditions', report: 'Report Problem', send: 'Send', back: 'Back', order_form: 'Order Form', qty: 'Quantity', color: 'Color', name: 'Full Name', phone: 'Phone', country: 'Country', address: 'Address', buy_now: 'Confirm Order', success_order: 'Order Successful!', search: 'Search...' }
+            ar: { categories: 'الفئات', all_products: 'المنتجات', about: 'من نحن', about_text: 'مصدرك الأول لمستلزمات الكهرباء.', links: 'روابط', home: 'الرئيسية', privacy: 'الخصوصية', contact: 'اتصل بنا', report: 'ابلاغ', send: 'ارسال', back: 'عودة', order_form: 'استمارة الطلب', qty: 'الكمية', color: 'اللون', buy_now: 'تأكيد الطلب', success_order: 'تم الطلب بنجاح' },
+            fr: { categories: 'Catégories', all_products: 'Produits', about: 'À propos', about_text: 'Votre source n°1.', links: 'Liens', home: 'Accueil', privacy: 'Confidentialité', contact: 'Contact', report: 'Signaler', send: 'Envoyer', back: 'Retour', order_form: 'Commande', qty: 'Qté', color: 'Couleur', buy_now: 'Confirmer', success_order: 'Succès' },
+            es: { categories: 'Categorías', all_products: 'Productos', about: 'Nosotros', about_text: 'Su fuente n.1', links: 'Enlaces', home: 'Inicio', privacy: 'Privacidad', contact: 'Contacto', report: 'Reportar', send: 'Enviar', back: 'Volver', order_form: 'Pedido', qty: 'Cant', color: 'Color', buy_now: 'Confirmar', success_order: 'Éxito' },
+            en: { categories: 'Categories', all_products: 'Products', about: 'About', about_text: 'Your #1 source.', links: 'Links', home: 'Home', privacy: 'Privacy', contact: 'Contact', report: 'Report', send: 'Send', back: 'Back', order_form: 'Order', qty: 'Qty', color: 'Color', buy_now: 'Confirm', success_order: 'Success' }
         };
 
-        // --- GLOBAL FUNCTIONS ---
-
+        // --- GLOBAL ---
         window.changeLang = (l) => {
-            currentState.lang = l;
+            state.lang = l;
             document.documentElement.lang = l;
             document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
-            currentState.currency = l === 'ar' ? 'DA' : '€';
+            state.currency = l === 'ar' ? 'DA' : '€';
             
-            // Translate UI
             document.querySelectorAll('[data-key]').forEach(el => {
-                const k = el.getAttribute('data-key');
-                if(i18n[l][k]) el.innerText = i18n[l][k];
-            });
-            document.querySelectorAll('input[placeholder]').forEach(el => {
-                 // specific placeholders logic if needed, simplfied here
+                if(i18n[l][el.dataset.key]) el.innerText = i18n[l][el.dataset.key];
             });
             
-            // Ticker Update & Direction
-            const tText = currentState.settings.ticker[l] || currentState.settings.ticker['en'];
             const tEl = document.getElementById('ticker-text');
-            tEl.innerText = tText;
+            tEl.innerText = state.settings.ticker[l] || state.settings.ticker['en'];
             tEl.style.animation = l === 'ar' ? 'ticker-ltr 20s linear infinite' : 'ticker-rtl 20s linear infinite';
-
-            // Refresh Products (for Price Currency)
-            window.renderProds();
+            
+            renderProds();
         };
 
-        window.showPage = (pageName, prodId = null) => {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            if(pageName === 'home') {
-                document.getElementById('page-home').classList.add('active');
-                window.scrollTo(0,0);
-            } else if (pageName === 'product' && prodId) {
-                const p = currentState.products.find(x => x.id === prodId);
-                if(p) {
-                    document.getElementById('view-img').src = p.imgs[0];
-                    // Thumbs
-                    const tRow = document.getElementById('view-thumbs');
-                    tRow.innerHTML = '';
-                    p.imgs.forEach(src => {
-                        tRow.innerHTML += `<img src="${src}" class="thumb-img" onclick="document.getElementById('view-img').src='${src}'">`;
-                    });
-
-                    document.getElementById('view-cat').innerText = p.cat;
-                    document.getElementById('view-title').innerText = p.name;
-                    
-                    const price = currentState.lang === 'ar' ? `${p.price_dz} DA` : `${p.price_eu || (p.price_dz/200).toFixed(2)} €`;
-                    document.getElementById('view-price').innerText = price;
-                    document.getElementById('view-desc').innerText = p.desc;
-                    
-                    const colorSel = document.getElementById('ord-color');
-                    colorSel.innerHTML = '';
-                    p.colors.forEach(c => colorSel.innerHTML += `<option>${c}</option>`);
-                    
-                    window.currentProdId = prodId;
-                    document.getElementById('page-product').classList.add('active');
-                    window.scrollTo(0,0);
-                }
-            }
-        };
-
-        window.renderProds = (catFilter = null, searchQ = null) => {
+        window.renderProds = (cat=null, q=null) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
-            
-            let list = currentState.products;
-            if(catFilter) list = list.filter(p => p.cat === catFilter);
-            if(searchQ) list = list.filter(p => p.name.toLowerCase().includes(searchQ.toLowerCase()));
+            let list = state.products;
+            if(cat) list = list.filter(p => p.cat == cat);
+            if(q) list = list.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
 
             list.forEach(p => {
-                const priceDisplay = currentState.lang === 'ar' ? `${p.price_dz} DA` : `${p.price_eu || (p.price_dz/200).toFixed(2)} €`;
+                const pr = state.lang === 'ar' ? `${p.price_dz} DA` : `${p.price_eu} €`;
                 grid.innerHTML += `
                     <div class="product-card" onclick="showPage('product', '${p.id}')">
                         <img src="${p.imgs[0]}" class="p-img">
-                        <div class="p-info">
-                            <div class="p-cat">${p.cat}</div>
-                            <div class="p-title">${p.name}</div>
-                            <div class="p-price">${priceDisplay}</div>
-                        </div>
-                    </div>
-                `;
+                        <div class="p-info"><div class="p-cat">${p.cat}</div><div class="p-title">${p.name}</div><div class="p-price">${pr}</div></div>
+                    </div>`;
             });
         };
 
-        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
+        window.showPage = (pg, pid=null) => {
+            document.querySelectorAll('.page-section').forEach(e => e.classList.remove('active'));
+            if(pg === 'home') document.getElementById('page-home').classList.add('active');
+            if(pg === 'product') {
+                const p = state.products.find(x => x.id == pid);
+                if(p) {
+                    document.getElementById('view-img').src = p.imgs[0];
+                    document.getElementById('view-thumbs').innerHTML = p.imgs.map(s=>`<img src="${s}" class="thumb-img" onclick="document.getElementById('view-img').src='${s}'">`).join('');
+                    document.getElementById('view-cat').innerText = p.cat;
+                    document.getElementById('view-title').innerText = p.name;
+                    document.getElementById('view-price').innerText = state.lang==='ar' ? p.price_dz+' DA' : p.price_eu+' €';
+                    document.getElementById('view-desc').innerText = p.desc;
+                    
+                    // Documents Links
+                    const docsDiv = document.getElementById('doc-links');
+                    docsDiv.innerHTML = '';
+                    if(p.cert) docsDiv.innerHTML += `<a href="${p.cert}" target="_blank" style="color:blue"><i class="fas fa-certificate"></i> Certificat Export</a>`;
+                    if(p.fiche) docsDiv.innerHTML += `<a href="${p.fiche}" target="_blank" style="color:blue"><i class="fas fa-file-pdf"></i> Fiche Technique</a>`;
+
+                    const cSel = document.getElementById('ord-color');
+                    cSel.innerHTML = '';
+                    p.colors.forEach(c => cSel.innerHTML += `<option>${c}</option>`);
+                    window.currPid = pid;
+                    document.getElementById('page-product').classList.add('active');
+                }
+            }
+            window.scrollTo(0,0);
+        };
 
         window.submitOrder = async () => {
-            const p = currentState.products.find(x => x.id === window.currentProdId);
-            const order = {
+            const p = state.products.find(x => x.id == window.currPid);
+            const ord = {
                 product: p.name,
-                price: currentState.lang === 'ar' ? p.price_dz : p.price_eu,
-                currency: currentState.currency,
+                price: state.lang==='ar'?p.price_dz:p.price_eu,
                 qty: document.getElementById('ord-qty').value,
-                color: document.getElementById('ord-color').value,
                 customer: document.getElementById('ord-name').value,
                 phone: document.getElementById('ord-phone').value,
-                country: document.getElementById('ord-country').value,
-                address: document.getElementById('ord-addr').value,
                 date: new Date().toLocaleDateString()
             };
-
-            if(!order.customer || !order.phone) return alert("Please fill Name and Phone");
-
-            if(db) await addDoc(collection(db, 'orders'), order);
-            else {
-                currentState.orders.unshift(order); // Local fallback
-                updateAdminUI();
-            }
-
-            document.getElementById('success-overlay').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('success-overlay').style.display = 'none';
-                showPage('home');
-            }, 2500);
+            if(db) await addDoc(collection(db, 'orders'), ord);
+            else { state.orders.unshift(ord); updateAdmin(); }
+            document.getElementById('success-overlay').style.display='flex';
+            setTimeout(()=>{document.getElementById('success-overlay').style.display='none'; showPage('home');}, 2000);
         };
 
-        // --- ADMIN FUNCTIONS ---
-        window.openAdminLogin = () => document.getElementById('admin-login').style.display = 'flex';
-        
+        // --- ADMIN ---
+        window.openAdminLogin = () => document.getElementById('admin-login').style.display='flex';
         window.login = () => {
-            const u = document.getElementById('adm-user').value;
-            const p = document.getElementById('adm-pass').value;
-            if(u === 'admin' && p === 'abobob123') {
-                document.getElementById('admin-login').style.display = 'none';
+            if(document.getElementById('adm-user').value === 'admin' && document.getElementById('adm-pass').value === 'abobob123') {
+                document.getElementById('admin-login').style.display='none';
                 document.getElementById('page-home').classList.remove('active');
-                document.getElementById('admin-panel').style.display = 'block';
-                updateAdminUI();
-            } else {
-                document.getElementById('login-msg').style.display = 'block';
-            }
+                document.getElementById('admin-panel').style.display='block';
+                updateAdmin();
+            } else document.getElementById('login-msg').style.display='block';
         };
-
-        window.logout = () => window.location.reload();
-        window.closeAdmin = () => {
-             document.getElementById('admin-panel').style.display = 'none';
-             showPage('home');
-        };
-
+        window.closeAdmin = () => { document.getElementById('admin-panel').style.display='none'; showPage('home'); };
         window.switchTab = (t) => {
-            document.querySelectorAll('.admin-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-content').forEach(e=>e.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
             document.getElementById('tab-'+t).classList.add('active');
             event.target.classList.add('active');
         };
 
+        // --- EDIT / SAVE / IMPORT ---
         window.saveProduct = async () => {
-            const id = document.getElementById('edit-id').value || Date.now().toString();
-            const prodData = {
+            // Check ID for edit
+            const editId = document.getElementById('edit-id').value;
+            const id = editId || Date.now().toString();
+
+            // Handling files (Simulated by Fake Path or manual URL)
+            // In a real app, upload to Firebase Storage and get URL
+            let imgUrls = document.getElementById('np-img').value.split(',').filter(x=>x);
+            // Just simulated file read for demo
+            if(imgUrls.length === 0) imgUrls = ['https://via.placeholder.com/400']; 
+            
+            const pData = {
                 id: id,
                 name: document.getElementById('np-name').value,
+                cat: document.getElementById('np-cat').value,
                 price_dz: Number(document.getElementById('np-price-dz').value),
                 price_eu: Number(document.getElementById('np-price-eu').value),
-                cat: document.getElementById('np-cat').value,
                 desc: document.getElementById('np-desc').value,
-                colors: document.getElementById('np-colors').value.split(',').map(s=>s.trim()),
-                imgs: document.getElementById('np-img').value.split(',').map(s=>s.trim())
+                colors: document.getElementById('np-colors').value.split(','),
+                imgs: imgUrls,
+                // These would be URLs in real life
+                cert: document.getElementById('np-cert-file').value ? '#' : '',
+                fiche: document.getElementById('np-fiche-file').value ? '#' : ''
             };
 
-            if(db) {
-                // Determine if add or update based on existence (Simplified: always setDoc for this demo logic)
-                await setDoc(doc(db, "products", id.toString()), prodData);
-            } else {
-                // Local Logic
-                const idx = currentState.products.findIndex(p => p.id.toString() === id);
-                if(idx >= 0) currentState.products[idx] = prodData;
-                else currentState.products.push(prodData);
-                renderProds(); // update views
+            if(db) await setDoc(doc(db, "products", id), pData);
+            else {
+                const idx = state.products.findIndex(x=>x.id == id);
+                if(idx > -1) state.products[idx] = pData; else state.products.push(pData);
+                renderProds(); updateAdmin();
             }
-            alert('Product Saved for All Users');
-            window.clearForm();
+            alert('Saved');
+            clearForm();
         };
 
-        window.editProduct = (id) => {
-            const p = currentState.products.find(x => x.id == id);
-            if(!p) return;
+        window.editProd = (id) => {
+            const p = state.products.find(x => x.id == id);
             document.getElementById('edit-id').value = p.id;
             document.getElementById('np-name').value = p.name;
-            document.getElementById('np-price-dz').value = p.price_dz;
-            document.getElementById('np-price-eu').value = p.price_eu || '';
             document.getElementById('np-cat').value = p.cat;
+            document.getElementById('np-price-dz').value = p.price_dz;
+            document.getElementById('np-price-eu').value = p.price_eu;
             document.getElementById('np-desc').value = p.desc;
-            document.getElementById('np-colors').value = p.colors.join(',');
+            document.getElementById('np-colors').value = p.colors;
             document.getElementById('np-img').value = p.imgs.join(',');
             window.scrollTo(0,0);
         };
 
-        window.deleteProduct = async (id) => {
+        window.deleteProd = async (id) => {
             if(confirm('Delete?')) {
-                if(db) await deleteDoc(doc(db, 'products', id.toString()));
-                else {
-                    currentState.products = currentState.products.filter(p => p.id != id);
-                    renderProds();
-                    updateAdminUI();
-                }
+                if(db) await deleteDoc(doc(db, 'products', id));
+                else { state.products = state.products.filter(x=>x.id!=id); renderProds(); updateAdmin(); }
             }
         };
 
         window.clearForm = () => {
-            document.getElementById('edit-id').value = '';
-            document.querySelectorAll('#tab-products input, #tab-products textarea').forEach(i => i.value = '');
+            document.getElementById('edit-id').value='';
+            document.querySelectorAll('#tab-products input, #tab-products textarea').forEach(i=>i.value='');
         };
 
-        window.updateGlobalSettings = async () => {
-            const newSettings = {
+        window.importCSV = () => {
+            const f = document.getElementById('csv-file').files[0];
+            if(!f) return;
+            const r = new FileReader();
+            r.onload = (e) => {
+                const rows = e.target.result.split('\n');
+                rows.forEach((r, i) => {
+                    if(i>0 && r.length>5) {
+                        const c = r.split(',');
+                        const p = {id: Date.now()+i, name:c[0], cat:c[1], price_dz:c[2], price_eu:c[3], desc:c[4], imgs:['https://via.placeholder.com/300'], colors:[]};
+                        if(db) setDoc(doc(db, 'products', p.id.toString()), p);
+                        else state.products.push(p);
+                    }
+                });
+                alert('Imported');
+                renderProds(); updateAdmin();
+            };
+            r.readAsText(f);
+        };
+
+        window.saveGlobalSettings = async () => {
+            const s = {
                 theme: document.getElementById('set-theme').value,
                 ticker: {
-                    ar: document.getElementById('tick-ar').value || currentState.settings.ticker.ar,
-                    fr: document.getElementById('tick-fr').value || currentState.settings.ticker.fr,
-                    es: document.getElementById('tick-es').value || currentState.settings.ticker.es,
-                    en: document.getElementById('tick-en').value || currentState.settings.ticker.en,
+                    ar: document.getElementById('tick-ar').value,
+                    fr: document.getElementById('tick-fr').value,
+                    es: document.getElementById('tick-es').value,
+                    en: document.getElementById('tick-en').value
                 },
-                slider: currentState.settings.slider
+                slider: state.settings.slider
             };
-            
-            if(db) await setDoc(doc(db, 'settings', 'main'), newSettings);
-            else {
-                currentState.settings = newSettings;
-                applySettings();
-            }
-            alert('Settings Updated Globally');
+            if(db) await setDoc(doc(db, 'settings', 'main'), s);
+            else { state.settings = s; applySettings(); }
+            alert('Updated All Users');
         };
 
-        window.addSlideImg = () => {
-            const url = document.getElementById('slider-url').value;
-            if(url) {
-                currentState.settings.slider.push(url);
-                window.updateGlobalSettings(); // Save to DB
-            }
-        };
-
-        function updateAdminUI() {
-            // Stats
-            document.getElementById('st-visits').innerText = currentState.visits + Math.floor(Math.random()*10); // Simulated live
-            document.getElementById('st-today').innerText = 45; 
-            document.getElementById('st-orders').innerText = currentState.orders.length;
-            const rev = currentState.orders.reduce((sum, o) => sum + (o.currency === 'DA' ? o.price : o.price*200), 0);
-            document.getElementById('st-revenue').innerText = rev.toFixed(0) + " DA eq";
-
-            // Product List
+        function updateAdmin() {
+            document.getElementById('st-orders').innerText = state.orders.length;
             const pl = document.getElementById('admin-prod-list');
             pl.innerHTML = '';
-            currentState.products.forEach(p => {
-                pl.innerHTML += `
-                    <div style="background:#fff; padding:10px; margin-bottom:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <img src="${p.imgs[0]}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
-                            <strong>${p.name}</strong>
-                        </div>
-                        <div>
-                            <button onclick="editProduct('${p.id}')" style="background:orange; border:none; padding:5px 10px; color:#fff; border-radius:4px; cursor:pointer;">Edit</button>
-                            <button onclick="deleteProduct('${p.id}')" style="background:red; border:none; padding:5px 10px; color:#fff; border-radius:4px; cursor:pointer;">Delete</button>
-                        </div>
-                    </div>`;
+            state.products.forEach(p => {
+                pl.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+                    <b>${p.name}</b>
+                    <div>
+                        <button onclick="editProd('${p.id}')" style="color:orange; cursor:pointer;">Edit</button>
+                        <button onclick="deleteProd('${p.id}')" style="color:red; cursor:pointer;">Delete</button>
+                    </div>
+                </div>`;
             });
-
-            // Order Table
             const ot = document.getElementById('admin-orders-table');
             ot.innerHTML = '';
-            currentState.orders.forEach(o => {
-                ot.innerHTML += `<tr>
-                    <td style="padding:10px;">${o.date}</td>
-                    <td>${o.customer}</td>
-                    <td>${o.product}</td>
-                    <td>${o.price} ${o.currency}</td>
-                    <td><button style="font-size:12px;">View</button></td>
-                </tr>`;
+            state.orders.forEach(o => {
+                ot.innerHTML += `<tr><td>${o.date}</td><td>${o.customer}</td><td>${o.product}</td><td>${o.price}</td></tr>`;
             });
         }
 
         function applySettings() {
-            // Apply Theme
-            document.body.className = currentState.settings.theme;
-            
-            // Apply Ticker (refresh based on lang)
-            changeLang(currentState.lang);
-
-            // Apply Slider
+            document.body.className = state.settings.theme;
+            changeLang(state.lang);
             const sl = document.getElementById('slider-container');
-            sl.innerHTML = '';
-            currentState.settings.slider.forEach((src, i) => {
-                sl.innerHTML += `<img src="${src}" class="slide ${i===0?'active':''}">`;
-            });
-            // Restart Animation logic (simple)
-            let sIdx = 0;
-            if(window.sliderInt) clearInterval(window.sliderInt);
-            window.sliderInt = setInterval(() => {
-                const slides = document.querySelectorAll('.slide');
-                if(slides.length > 0) {
-                    slides[sIdx].classList.remove('active');
-                    sIdx = (sIdx + 1) % slides.length;
-                    slides[sIdx].classList.add('active');
-                }
+            sl.innerHTML = state.settings.slider.map((s,i)=>`<img src="${s}" class="slide ${i==0?'active':''}">`).join('');
+            // Restart slider loop
+            let sI=0; setInterval(()=>{
+                const ss = document.querySelectorAll('.slide');
+                if(ss.length){ ss[sI].classList.remove('active'); sI=(sI+1)%ss.length; ss[sI].classList.add('active'); }
             }, 3000);
         }
 
-        // --- FIREBASE LISTENERS (REAL-TIME UPDATES) ---
-        function initListeners() {
-            if(!db) {
-                // Add dummy data if no DB
-                currentState.products.push({id:'1', name:'Smart LED Bulb', cat:'Lighting', price_dz: 1500, price_eu: 7.5, desc:'Control via Phone', colors:['White', 'RGB'], imgs:['https://via.placeholder.com/400?text=Bulb']});
-                currentState.products.push({id:'2', name:'Classic Chandelier', cat:'Decor', price_dz: 25000, price_eu: 125, desc:'Luxury Crystal', colors:['Gold'], imgs:['https://via.placeholder.com/400?text=Chandelier']});
-                renderProds();
-                renderCats();
-                applySettings();
-                return;
-            }
-
-            // Products Listener
-            onSnapshot(collection(db, "products"), (snap) => {
-                const prods = [];
-                snap.forEach(doc => prods.push(doc.data()));
-                currentState.products = prods;
-                renderProds();
-                renderCats();
-                updateAdminUI(); // If admin is open
+        // --- INIT LISTENER ---
+        if(db) {
+            onSnapshot(collection(db, 'products'), (s)=>{
+                let tmp=[]; s.forEach(d=>tmp.push(d.data())); state.products=tmp; 
+                renderProds(); updateAdmin();
+                // Generate cats
+                const cats = [...new Set(tmp.map(p=>p.cat))];
+                document.getElementById('cat-list').innerHTML = cats.map(c=>`<div class="cat-link" onclick="renderProds('${c}'); toggleSidebar()">${c}</div>`).join('');
             });
-
-            // Settings Listener
-            onSnapshot(doc(db, "settings", "main"), (doc) => {
-                if(doc.exists()) {
-                    currentState.settings = doc.data();
-                    applySettings();
-                    // Populate inputs
-                    document.getElementById('set-theme').value = currentState.settings.theme;
-                    document.getElementById('tick-ar').value = currentState.settings.ticker.ar;
-                    document.getElementById('tick-fr').value = currentState.settings.ticker.fr;
-                    document.getElementById('tick-es').value = currentState.settings.ticker.es;
-                    document.getElementById('tick-en').value = currentState.settings.ticker.en;
-                }
+            onSnapshot(doc(db, 'settings', 'main'), (d)=>{
+                if(d.exists()) { state.settings=d.data(); applySettings(); }
             });
-
-            // Orders Listener (Admin only usually, but loaded here for dashboard)
-            onSnapshot(collection(db, "orders"), (snap) => {
-                const ords = [];
-                snap.forEach(doc => ords.push(doc.data()));
-                currentState.orders = ords.sort((a,b) => new Date(b.date) - new Date(a.date));
-                if(document.getElementById('admin-panel').style.display === 'block') updateAdminUI();
+            onSnapshot(collection(db, 'orders'), (s)=>{
+                let tmp=[]; s.forEach(d=>tmp.push(d.data())); state.orders=tmp; updateAdmin();
             });
+        } else {
+            // Local Dummy
+            state.products.push({id:'1', name:'Demo Lamp', cat:'Light', price_dz:1000, price_eu:5, desc:'Test', colors:['White'], imgs:['https://via.placeholder.com/300']});
+            renderProds(); applySettings();
         }
 
-        function renderCats() {
-            const cats = [...new Set(currentState.products.map(p => p.cat))];
-            const cl = document.getElementById('cat-list');
-            cl.innerHTML = `<div class="cat-link" onclick="renderProds(); toggleSidebar()">All / الكل</div>`;
-            cats.forEach(c => {
-                cl.innerHTML += `<div class="cat-link" onclick="renderProds('${c}'); toggleSidebar()"><span>${c}</span> <i class="fas fa-chevron-right" style="font-size:12px"></i></div>`;
-            });
-        }
-
-        // START
-        initListeners();
         changeLang('ar');
-        
-        // Simulating View Counter
-        setInterval(() => { currentState.visits++; if(document.getElementById('admin-panel').style.display === 'block') document.getElementById('st-visits').innerText = currentState.visits; }, 10000);
-
     </script>
 </body>
 </html>
