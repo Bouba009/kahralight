@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KahraLight Store</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #0044cc; /* Kahra Blue */
+            --secondary-color: #ff9900; /* Light Orange */
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --sidebar-width: 250px;
+            --ticker-bg: #fff700; /* Canary Yellow */
+        }
+
+        /* Themes */
+        body.theme-dark-blue { --bg-color: #0a192f; --text-color: #fff; --primary-color: #fff; }
+        body.theme-orange-blue { --bg-color: #fff; --primary-color: #ff9900; --secondary-color: #0044cc; }
+        body.theme-yellow-white { --bg-color: #fff; --primary-color: #dec800; --secondary-color: #333; }
+
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+        
+        body { background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 28px; font-weight: bold; }
+        .logo-kahra { color: #0044cc; }
+        .logo-light { 
+            color: #ff9900; 
+            text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900; 
+        }
+
+        .search-bar { display: flex; flex: 1; margin: 0 20px; max-width: 500px; }
+        .search-bar input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 0 5px 5px 0; }
+        .search-bar button { padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px 0 0 5px; cursor: pointer; }
+
+        .header-icons span { margin-left: 15px; cursor: pointer; font-size: 1.2rem; position: relative; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; right: -260px; width: var(--sidebar-width); height: 100%;
+            background: #fff; box-shadow: -2px 0 5px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1001; padding: 20px;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar h3 { border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 15px; }
+        .sidebar li { padding: 10px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+        .close-sidebar { position: absolute; top: 10px; left: 10px; font-size: 20px; cursor: pointer; }
+
+        /* Slider */
+        #hero-slider { width: 100%; height: 350px; overflow: hidden; position: relative; }
+        .slide { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .slide.active { display: block; animation: fade 1s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* Ticker */
+        .ticker-wrap {
+            width: 100%; background: var(--ticker-bg); overflow: hidden; height: 40px; line-height: 40px;
+        }
+        .ticker { display: inline-block; white-space: nowrap; font-weight: bold; color: #000; }
+        /* Animation Logic injected via JS based on language */
+
+        /* Products Grid */
+        .container { padding: 20px 5%; min-height: 60vh; }
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
+        }
+        .product-card {
+            background: #fff; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer;
+        }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .product-img { width: 100%; height: 200px; object-fit: cover; }
+        .product-info { padding: 15px; }
+        .product-price { color: var(--secondary-color); font-weight: bold; font-size: 1.1rem; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; margin-right: 5px; }
+        .btn-add { width: 100%; background: var(--primary-color); color: #fff; border: none; padding: 8px; margin-top: 10px; cursor: pointer; border-radius: 5px; }
+
+        /* Product Modal */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5); overflow: auto;
+        }
+        .modal-content {
+            background-color: #fff; margin: 5% auto; padding: 20px; border-radius: 10px; width: 80%; max-width: 900px; display: flex; flex-wrap: wrap; position: relative;
+        }
+        .close-modal { position: absolute; top: 10px; left: 15px; font-size: 30px; cursor: pointer; }
+        .modal-left { flex: 1; min-width: 300px; padding: 10px; }
+        .modal-right { flex: 1; min-width: 300px; padding: 20px; }
+        
+        .modal-slider img { width: 100%; height: 300px; object-fit: contain; }
+        .qty-control { margin: 15px 0; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .btn-buy { background: var(--secondary-color); color: #000; width: 100%; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 1.1rem; border-radius: 5px; margin-top: 10px; }
+        
+        /* Success Animation */
+        .success-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            z-index: 3000; display: none; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .checkmark { width: 80px; height: 80px; border-radius: 50%; display: block; stroke-width: 2; stroke: #4bb71b; stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px #4bb71b; animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; }
+        .checkmark__circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 2; stroke-miterlimit: 10; stroke: #4bb71b; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards; }
+        .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards; }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+
+        /* Footer */
+        footer { background: #222; color: #fff; padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        footer h4 { color: var(--secondary-color); margin-bottom: 15px; }
+        footer a { display: block; margin-bottom: 8px; color: #ccc; }
+        
+        /* ADMIN PANEL STYLES */
+        #admin-panel { display: none; background: #f0f2f5; padding: 20px; }
+        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 2rem; color: var(--primary-color); }
+        .admin-nav { background: #fff; padding: 10px; margin-bottom: 20px; border-radius: 5px; }
+        .admin-nav button { margin: 0 10px; padding: 5px 15px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: right; }
+        th { background: #eee; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-icons">
+            <span onclick="toggleSidebar()"><i class="fas fa-bars"></i></span>
+        </div>
+        <div class="logo">
+            <span class="logo-kahra">Kahra</span><span class="logo-light">Light</span>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="filterProducts()">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-icons">
+            <span><i class="fas fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></span>
+            <span onclick="toggleAdmin()" title="Admin Panel"><i class="fas fa-user-cog"></i></span>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <span class="close-sidebar" onclick="toggleSidebar()">&times;</span>
+        <h3>التصنيفات</h3>
+        <ul id="category-list">
+            <!-- Categories injected by JS -->
+        </ul>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div id="app-container">
+        
+        <!-- Slider -->
+        <div id="hero-slider">
+            <!-- Images injected by JS -->
+        </div>
+
+        <!-- Ticker -->
+        <div class="ticker-wrap">
+            <div class="ticker" id="news-ticker">
+                مرحباً بكم في متجر كهرالايت - أفضل المنتجات الكهربائية - عروض خاصة لهذا الأسبوع
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="container">
+            <h2 style="margin-bottom: 20px; border-right: 5px solid var(--secondary-color); padding-right: 10px;">جميع المنتجات</h2>
+            <div class="products-grid" id="products-container">
+                <!-- Products injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal (Detail & Order) -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-left">
+                <div class="modal-slider" id="modal-img-container">
+                    <img id="modal-main-img" src="" alt="">
+                </div>
+            </div>
+            <div class="modal-right">
+                <h2 id="modal-title">اسم المنتج</h2>
+                <p id="modal-price" class="product-price">0 د.ج</p>
+                <div id="modal-desc">وصف المنتج</div>
+                <div style="margin: 10px 0;">
+                    <a href="#" id="cert-link" style="color:blue; text-decoration:underline;">تحميل شهادة التصدير</a> | 
+                    <a href="#" id="fiche-link" style="color:blue; text-decoration:underline;">Fiche Technique</a>
+                </div>
+                
+                <div class="qty-control">
+                    <label>الكمية:</label>
+                    <input type="number" id="order-qty" value="1" min="1" style="width: 60px;">
+                    <label>اللون:</label>
+                    <select id="order-color"><option>أفتراضي</option></select>
+                </div>
+
+                <hr style="margin: 15px 0;">
+                <h3>استمارة الطلب</h3>
+                <form id="order-form" onsubmit="submitOrder(event)">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="cust-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" id="cust-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البلد</label>
+                        <select id="cust-country">
+                            <option value="الجزائر">الجزائر</option>
+                            <option value="اسبانيا">اسبانيا</option>
+                            <option value="فرنسا">فرنسا</option>
+                            <option value="البرتغال">البرتغال</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>العنوان</label>
+                        <textarea id="cust-address" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-buy">شراء الآن</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h1>لوحة التحكم</h1>
+            <button onclick="toggleAdmin()" style="padding:10px; background:red; color:white; border:none;">خروج</button>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card"><h3>1,205</h3><p>زيارات</p></div>
+            <div class="card"><h3 id="stat-orders">0</h3><p>طلبات جديدة</p></div>
+            <div class="card"><h3>45</h3><p>زيارات اليوم</p></div>
+            <div class="card"><h3 id="stat-total">0</h3><p>إجمالي الطلبات</p></div>
+        </div>
+
+        <div class="admin-nav">
+            <button onclick="showAdminTab('add-product')">إضافة منتج</button>
+            <button onclick="showAdminTab('orders-list')">الطلبات</button>
+            <button onclick="showAdminTab('settings')">الإعدادات & المظهر</button>
+            <button onclick="showAdminTab('messages')">الرسائل</button>
+        </div>
+
+        <!-- Add Product Tab -->
+        <div id="tab-add-product" class="admin-tab">
+            <h3>إضافة منتج جديد</h3>
+            <div style="background:#fff; padding:20px; max-width:600px;">
+                <input type="text" id="admin-p-name" placeholder="اسم المنتج" class="form-group" style="width:100%; margin-bottom:10px; padding:10px;">
+                <input type="number" id="admin-p-price" placeholder="السعر" class="form-group" style="width:100%; margin-bottom:10px; padding:10px;">
+                <input type="text" id="admin-p-cat" placeholder="الفئة" class="form-group" style="width:100%; margin-bottom:10px; padding:10px;">
+                <textarea id="admin-p-desc" placeholder="الوصف" class="form-group" style="width:100%; margin-bottom:10px; padding:10px;"></textarea>
+                <input type="text" id="admin-p-img" placeholder="رابط الصورة" class="form-group" style="width:100%; margin-bottom:10px; padding:10px;">
+                
+                <hr>
+                <h4>أو استيراد CSV</h4>
+                <input type="file" id="csv-file" accept=".csv">
+                <button onclick="processCSV()" style="padding:5px 10px;">رفع CSV</button>
+                <hr>
+                <button onclick="addNewProduct()" style="padding:10px 20px; background:green; color:white; border:none; margin-top:10px;">حفظ المنتج</button>
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="tab-orders-list" class="admin-tab" style="display:none;">
+            <h3>سجل الطلبات</h3>
+            <table id="orders-table">
+                <thead>
+                    <tr><th>التاريخ</th><th>الاسم</th><th>المنتج</th><th>السعر</th><th>العنوان</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- Settings Tab -->
+        <div id="tab-settings" class="admin-tab" style="display:none;">
+            <h3>تخصيص المتجر</h3>
+            <p>اختر الثيم:</p>
+            <button onclick="setTheme('default')">أفتراضي</button>
+            <button onclick="setTheme('theme-dark-blue')">أزرق غامق / أبيض</button>
+            <button onclick="setTheme('theme-orange-blue')">برتقالي / أزرق</button>
+            <button onclick="setTheme('theme-yellow-white')">أصفر / أبيض</button>
+            <br><br>
+            <p>نص الشريط المتحرك:</p>
+            <input type="text" id="ticker-text-input" placeholder="اكتب النص هنا">
+            <button onclick="updateTicker()">تحديث</button>
+        </div>
+
+        <!-- Messages Tab -->
+        <div id="tab-messages" class="admin-tab" style="display:none;">
+            <h3>الرسائل والابلاغات</h3>
+            <table id="messages-table">
+                <thead><tr><th>الاسم</th><th>الايميل</th><th>الرسالة</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Success Animation Overlay -->
+    <div class="success-overlay" id="success-anim">
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+        <h2 style="margin-top:20px;">تم الطلب بنجاح!</h2>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div>
+            <h4>من نحن</h4>
+            <p>كهرالايت، وجهتكم الأولى لمستلزمات الإنارة والكهرباء.</p>
+        </div>
+        <div>
+            <h4>روابط هامة</h4>
+            <a href="#">سياسة الخصوصية</a>
+            <a href="#">الشروط والأحكام</a>
+        </div>
+        <div>
+            <h4>اتصل بنا</h4>
+            <p>موقعنا: الجزائر</p>
+            <p>هاتف: 0555000000</p>
+        </div>
+        <div>
+            <h4>ابلاغ عن مشكلة</h4>
+            <form onsubmit="submitReport(event)">
+                <input type="text" id="rep-name" placeholder="الاسم" style="width:100%; margin-bottom:5px; padding:5px;">
+                <input type="email" id="rep-email" placeholder="الايميل" style="width:100%; margin-bottom:5px; padding:5px;">
+                <textarea id="rep-msg" placeholder="الرسالة" style="width:100%; margin-bottom:5px; padding:5px;"></textarea>
+                <button style="width:100%; padding:5px;">إرسال</button>
+            </form>
+        </div>
+    </footer>
+
+    <!-- FIREBASE & LOGIC -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyC5dRvQZE1kMSsYojrMiyuQurnQwEleo3o",
+          authDomain: "mourafik-e9161.firebaseapp.com",
+          projectId: "mourafik-e9161",
+          storageBucket: "mourafik-e9161.firebasestorage.app",
+          messagingSenderId: "133465287328",
+          appId: "1:133465287328:web:9de5b3bd709099d885b7c5",
+          measurementId: "G-MDJXPZ7G5L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // --- GLOBAL STATE ---
+        // في حالة عدم عمل قاعدة البيانات بسبب صلاحيات الأمان، سنستخدم مصفوفة محلية للعرض
+        let products = [
+            { id: 1, name: 'مصباح LED ذكي', price: 1500, oldPrice: 2000, cat: 'انارة', img: 'https://via.placeholder.com/300x300?text=LED+Bulb', desc: 'مصباح اقتصادي عالي الجودة', colors: ['أبيض', 'أصفر'] },
+            { id: 2, name: 'قاطع كهربائي', price: 500, oldPrice: null, cat: 'كهرباء', img: 'https://via.placeholder.com/300x300?text=Breaker', desc: 'قاطع كهربائي آمن للمنازل', colors: [] },
+            { id: 3, name: 'ثريا مودرن', price: 12000, oldPrice: 15000, cat: 'ديكور', img: 'https://via.placeholder.com/300x300?text=Chandelier', desc: 'ثريا فاخرة للصالونات', colors: ['ذهبي', 'فضي'] },
+            { id: 4, name: 'كابل 100م', price: 3000, oldPrice: 3200, cat: 'كابلات', img: 'https://via.placeholder.com/300x300?text=Cable', desc: 'كابل نحاسي 2.5مم', colors: ['أسود'] },
+        ];
+
+        
