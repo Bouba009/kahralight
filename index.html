@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="es" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -134,10 +134,10 @@
             <input type="text" onkeyup="renderProds(null, this.value)" placeholder="Search...">
         </div>
         <div class="nav-tools">
-            <select class="lang-select" onchange="changeLang(this.value)">
+            <select class="lang-select" id="langSelect" onchange="changeLang(this.value)">
+                <option value="es" selected>🇪🇸 ES</option>
                 <option value="ar">🇩🇿 AR</option>
                 <option value="fr">🇫🇷 FR</option>
-                <option value="es">🇪🇸 ES</option>
                 <option value="en">🇬🇧 EN</option>
             </select>
             <div class="icon-btn" onclick="openAdminLogin()"><i class="fas fa-user-shield"></i></div>
@@ -197,21 +197,28 @@
                         
                         <div style="display:flex; gap:10px;">
                             <div style="flex:1">
-                                <label style="font-size:12px;">Qty</label>
+                                <label style="font-size:12px;" data-key="qty">Qty</label>
                                 <input type="number" id="ord-qty" value="1" min="1" class="inp-field">
                             </div>
                             <div style="flex:1" id="color-wrapper">
-                                <label style="font-size:12px;">Color</label>
+                                <label style="font-size:12px;" data-key="color">Color</label>
                                 <select id="ord-color" class="inp-field"></select>
                             </div>
                         </div>
 
-                        <input type="text" id="ord-name" placeholder="Name" class="inp-field">
-                        <input type="tel" id="ord-phone" placeholder="Phone" class="inp-field">
+                        <label style="font-size:12px;" data-key="name">Name</label>
+                        <input type="text" id="ord-name" class="inp-field">
+                        
+                        <label style="font-size:12px;" data-key="phone">Phone</label>
+                        <input type="tel" id="ord-phone" class="inp-field">
+                        
+                        <label style="font-size:12px;" data-key="country">Country</label>
                         <select id="ord-country" class="inp-field">
                             <option>Algeria</option><option>France</option><option>Spain</option><option>Portugal</option>
                         </select>
-                        <input type="text" id="ord-addr" placeholder="Address" class="inp-field">
+                        
+                        <label style="font-size:12px;" data-key="address">Address</label>
+                        <input type="text" id="ord-addr" class="inp-field">
                         
                         <button id="btn-buy" class="btn-buy" onclick="placeOrder()" data-key="buy_now">CONFIRM ORDER</button>
                     </div>
@@ -355,8 +362,8 @@
 
         // STATE
         let state = {
-            lang: 'ar',
-            currency: 'DA',
+            lang: 'es', // Default Spanish
+            currency: '€',
             cats: ['Lighting', 'Cables', 'Decor'],
             products: [],
             slider: [],
@@ -365,10 +372,10 @@
         };
 
         const i18n = {
-            ar: { all_products: 'جميع المنتجات', categories:'الفئات', back:'عودة', order_form:'استمارة الطلب', buy_now:'تأكيد الطلب' },
-            fr: { all_products: 'Tous les produits', categories:'Catégories', back:'Retour', order_form:'Bon de commande', buy_now:'Confirmer' },
-            en: { all_products: 'All Products', categories:'Categories', back:'Back', order_form:'Order Form', buy_now:'Confirm' },
-            es: { all_products: 'Productos', categories:'Categorías', back:'Volver', order_form:'Pedido', buy_now:'Confirmar' }
+            ar: { all_products: 'جميع المنتجات', categories:'الفئات', back:'عودة', order_form:'استمارة الطلب', buy_now:'تأكيد الطلب', qty:'الكمية', color:'اللون', name:'الاسم', phone:'الهاتف', country:'البلد', address:'العنوان', stock_in:'متوفر في المخزون', stock_out:'نفذت الكمية' },
+            fr: { all_products: 'Tous les produits', categories:'Catégories', back:'Retour', order_form:'Bon de commande', buy_now:'Confirmer', qty:'Quantité', color:'Couleur', name:'Nom', phone:'Téléphone', country:'Pays', address:'Adresse', stock_in:'En Stock', stock_out:'Rupture de stock' },
+            en: { all_products: 'All Products', categories:'Categories', back:'Back', order_form:'Order Form', buy_now:'Confirm', qty:'Qty', color:'Color', name:'Name', phone:'Phone', country:'Country', address:'Address', stock_in:'In Stock', stock_out:'Out of Stock' },
+            es: { all_products: 'Todos los productos', categories:'Categorías', back:'Volver', order_form:'Formulario de pedido', buy_now:'Confirmar', qty:'Cantidad', color:'Color', name:'Nombre', phone:'Teléfono', country:'País', address:'Dirección', stock_in:'En Stock', stock_out:'Agotado' }
         };
 
         // --- CORE ---
@@ -385,11 +392,8 @@
 
             // Ticker
             const t = document.getElementById('ticker-text');
-            const tw = document.querySelector('.ticker-wrap');
             t.innerText = state.ticker[l] || state.ticker['en'] || "Welcome to KahraLight";
             
-            // Ticker Animation Logic
-            // Create dynamic keyframes
             const animName = (l==='ar') ? 'ticker-ltr' : 'ticker-rtl';
             const style = document.createElement('style');
             style.innerHTML = `
@@ -418,7 +422,9 @@
 
             list.forEach(p => {
                 const price = (state.lang==='ar') ? p.price_da : p.price_eu;
-                const stockBadge = (!p.inStock) ? `<div class="out-stock-badge">Out of Stock</div>` : '';
+                // Translated Stock Badge
+                const stockText = i18n[state.lang].stock_out;
+                const stockBadge = (!p.inStock) ? `<div class="out-stock-badge">${stockText}</div>` : '';
                 grid.innerHTML += `
                     <div class="product-card" onclick="openProduct('${p.id}')">
                         ${stockBadge}
@@ -436,7 +442,7 @@
             const p = state.products.find(x => x.id == id);
             if(!p) return;
             
-            // URL Format: /kahralight/Category/Product-Name
+            // URL Format
             const niceUrl = `/kahralight/${encodeURIComponent(p.cat)}/${encodeURIComponent(p.name.replace(/\s+/g, '-'))}`;
             window.history.pushState({}, '', niceUrl);
 
@@ -452,17 +458,17 @@
             document.getElementById('dt-price').innerText = (state.lang==='ar' ? p.price_da : p.price_eu) + ' ' + state.currency;
             document.getElementById('dt-desc').innerText = p.desc;
             
-            // Stock Status
+            // Stock Status (Translated)
             const sDiv = document.getElementById('stock-status');
             const btn = document.getElementById('btn-buy');
             if(p.inStock) {
-                sDiv.innerHTML = '<span style="color:#22c55e"><i class="fas fa-check"></i> In Stock</span>';
+                sDiv.innerHTML = `<span style="color:#22c55e"><i class="fas fa-check"></i> ${i18n[state.lang].stock_in}</span>`;
                 btn.disabled = false;
                 btn.innerText = i18n[state.lang].buy_now;
             } else {
-                sDiv.innerHTML = '<span style="color:red"><i class="fas fa-times"></i> Out of Stock / Rupture</span>';
+                sDiv.innerHTML = `<span style="color:red"><i class="fas fa-times"></i> ${i18n[state.lang].stock_out}</span>`;
                 btn.disabled = true;
-                btn.innerText = "Out of Stock";
+                btn.innerText = i18n[state.lang].stock_out;
             }
 
             // Colors
@@ -505,9 +511,8 @@
         // --- ADMIN ---
         window.openAdminLogin = () => document.getElementById('login-modal').style.display = 'flex';
         window.checkLogin = () => {
-            // Password only, simplified and "hidden" from view as requested (hardcoded here in JS)
             const p = document.getElementById('adm-pass').value;
-            if(p === 'abobob123') { // Simple check
+            if(p === 'abobob123') {
                 document.getElementById('login-modal').style.display = 'none';
                 document.getElementById('view-home').classList.remove('active');
                 document.getElementById('view-admin').style.display = 'block';
@@ -687,9 +692,9 @@
         function applyGlobal() {
             document.body.className = state.theme;
             
-            // Sidebar Cats
+            // Sidebar Cats (Render ANY category added by admin)
             document.getElementById('sidebar-cats').innerHTML = 
-                `<div class="cat-link" onclick="renderGrid()">All / الكل</div>` + 
+                `<div class="cat-link" onclick="renderGrid()">All / Todos</div>` + 
                 state.cats.map(c => `<div class="cat-link" onclick="renderGrid('${c}')">${c}</div>`).join('');
             
             // Slider
@@ -708,6 +713,7 @@
                 }
             }, 3000);
 
+            // Re-apply language to catch new elements
             changeLang(state.lang);
         }
 
@@ -739,6 +745,7 @@
         }
 
         toggleColorInput();
+        changeLang('es'); // Enforce Spanish default
     </script>
 </body>
 </html>
