@@ -56,7 +56,7 @@
 
     <style>
         :root {
-            --primary: #e67e22; /* برتقالي كهربائي نحاسي */
+            --primary: #e67e22; /* برتقالي نحاسي كهربائي مميز */
             --secondary: #d35400;
             --danger: #e74c3c;
             --success: #2ecc71;
@@ -106,7 +106,7 @@
         .logo-brand { color: var(--primary) !important; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; animation: logoPulse 3s ease-in-out infinite; }
         @keyframes logoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
-        /* --- مبدل السوق المحلي والتصدير --- */
+        /* --- شريط مبدل السوق المحلي والتصدير --- */
         .market-toggle-container { display: flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 6px; margin: 20px 5% 10px; box-shadow: var(--shadow); gap: 10px; }
         .market-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: transparent; color: var(--text-muted); font-size: 15px; font-weight: bold; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
         .market-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
@@ -714,20 +714,28 @@
             currentMarket: 'local',
             favorites: [],
             products: [
-                { id: '1', name_ar: 'كشاف إنارة عمومية LED بقوة 150 واط', name_fr: 'Projecteur Éclairage Public LED 150W', price: 28500, category: 'الإنارة العمومية والخارجية', market: 'export', img: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600', images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600'], sizes: 'Standard', colors: 'Gris Métallisé', stock: 40, featured: true, rating: 4.9, desc: "Projecteur LED à haute efficacité énergétique, étanche IP66, conçu pour l'éclairage public et les grands projets industriels. Conforme aux normes CE.", specs: { voltage: "220-240V", power: "150W", safety: "IP66 / IK08", lumens: "18,000 lm", standards: "CE, RoHS, EN 60598" } },
-                { id: '2', name_ar: 'كابل كهربائي مسلح 4*16 مم²', name_fr: 'Câble Électrique Armé 4x16 mm²', price: 1850, category: 'كابلات وتوصيلات', market: 'local', img: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600', images: ['https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600'], sizes: 'Par Mètre', colors: 'Noir', stock: 1200, featured: true, rating: 4.8, desc: "Câble électrique industriel haute résistance, armé pour installations souterraines sécurisées, conforme aux réglementations nationales.", specs: { voltage: "0.6/1 kV", conductors: "4 conducteurs x 16 mm²", material: "Cuivre pur / PVC armé", temperature: "-15°C à +90°C", standards: "NFC 32-322" } },
-                { id: '3', name_ar: 'ثريا أوروبية صناعية فاخرة', name_fr: 'Lustre Industriel Design EU', price: 34000, category: 'ثريات وإنارة داخلية', market: 'export', img: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600', images: ['https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600'], sizes: '80cm Diamètre', colors: 'Doré / Noir', stock: 15, featured: false, rating: 4.7, desc: "Lustre haut de gamme d'un design chic européen, câblage certifié VDE, conforme aux normes CE.", specs: { voltage: "220-230V", sockets: "8 x E27 max 40W", material: "Acier inoxydable / Laiton", safety: "IP20, Classe I", standards: "CE, VDE, RoHS" } },
-                { id: '4', name_ar: 'لوحة توزيع كهربائية 36 خط', name_fr: 'Coffret Électrique de Distribution 36 Modules', price: 9200, category: 'مشاريع وورشات', market: 'local', img: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=600', images: ['https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=600'], sizes: '3 Rangs (36 Modules)', colors: 'Blanc / Gris transparent', stock: 35, featured: false, rating: 4.6, desc: "Tableau de distribution domestique ou tertiaire modulaire, robuste et facile à câbler avec borniers terre et neutre inclus.", specs: { material: "Plastique ABS auto-extinguible", safety: "IP40 / IK07", modules: "36", dimensions: "515 x 300 x 105 mm", standards: "IEC 60670" } }
+                // منتجات قسم التصدير (تتضمن الكابلات، والإنارة العمومية، والكشافات فقط)
+                { id: '1', name_ar: 'كابل كهربائي مسلح ذو طاقة عالية للربط الصناعي', name_fr: 'Câble Électrique Armé de Puissance Industriel', price: 2950, category: 'كابلات وتوصيلات', market: 'export', img: 'https://www.materielelectrique.com/media/product_image/0006/54/noname_cbp01394734_553580_product_image_d_large.jpeg', images: ['https://www.materielelectrique.com/media/product_image/0006/54/noname_cbp01394734_553580_product_image_d_large.jpeg'], sizes: 'Par Mètre', colors: 'Noir', stock: 1500, featured: true, rating: 4.9, desc: "Câble électrique armé de haute performance conçu pour les réseaux de distribution d'énergie industrielle et souterraine. Conforme aux certifications européennes les plus strictes.", specs: { voltage: "0.6/1 kV", conductors: "4x16 mm²", material: "Cuivre armé PVC", safety: "IP67 / Haute protection", standards: "CE, NF, IEC 60502" } },
+                { id: '2', name_ar: 'كشاف ضوئي LED خارجي عالي الأداء بقوة 150 واط', name_fr: 'Projecteur LED Extérieur Haute Performance 150W', price: 24500, category: 'الإنارة العمومية والخارجية', market: 'export', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagmZDCKsSYJgDU9GHI9z8hlnJChrDl5O2i-_gAys1eiXCiCD3OePPwQU&s=10', images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagmZDCKsSYJgDU9GHI9z8hlnJChrDl5O2i-_gAys1eiXCiCD3OePPwQU&s=10'], sizes: 'Standard', colors: 'Noir Métallisé', stock: 80, featured: true, rating: 4.8, desc: "Projecteur LED ultra-lumineux pour les installations de chantiers, les terrains de sport et l'éclairage de sécurité extérieur. Norme d'étanchéité avancée IP66.", specs: { voltage: "220-240V", power: "150W", safety: "IP66 / IK08", lumens: "16,500 lm", standards: "CE, RoHS, ErP" } },
+                { id: '3', name_ar: 'فانوس إنارة عمومية LED كلاسيكي للطرقات', name_fr: 'Lanterne Éclairage Public LED Routière', price: 31000, category: 'الإنارة العمومية والخارجية', market: 'export', img: 'https://storage.googleapis.com/stateless-site-mougins/2020/04/eclairage_public.jpg', images: ['https://storage.googleapis.com/stateless-site-mougins/2020/04/eclairage_public.jpg'], sizes: 'Standard', colors: 'Gris', stock: 45, featured: false, rating: 4.7, desc: "Tête de lampadaire à LED de qualité supérieure conçue pour l'éclairage des autoroutes, des rues et des zones publiques. Excellente dissipation thermique.", specs: { voltage: "220-230V", power: "120W", safety: "IP65, Classe I", lumens: "13,200 lm", standards: "CE, EN 60598-2-3" } },
+                { id: '4', name_ar: 'فانوس إنارة طرقات LED عالي الأداء', name_fr: 'Lanterne Routière LED Haute Efficacité', price: 28900, category: 'الإنارة العمومية والخارجية', market: 'export', img: 'https://www.villenavedornon.fr/fileadmin/_processed_/1/0/csm_eclairage-public-OA_161e9e7db2.jpeg', images: ['https://www.villenavedornon.fr/fileadmin/_processed_/1/0/csm_eclairage-public-OA_161e9e7db2.jpeg'], sizes: 'Standard', colors: 'Gris anthracite', stock: 60, featured: false, rating: 4.8, desc: "Luminaire d'éclairage extérieur élégant offrant une efficacité énergétique et une distribution lumineuse optimales pour la circulation urbaine.", specs: { voltage: "220-240V", power: "100W", safety: "IP66 / IK09", lumens: "11,500 lm", standards: "CE, RoHS" } },
+                
+                // منتجات السوق المحلي (تتضمن المنتجات المنزلية والصناعية الأخرى)
+                { id: '5', name_ar: 'خزانة توزيع كهربائية صناعية متكاملة', name_fr: 'Armoire Électrique de Distribution Industrielle', price: 42000, category: 'مشاريع وورشات', market: 'local', img: 'https://cdn9.ouedkniss.com/360/medias/announcements/images/DkKlQY/ejt7cDYDD2gDwVEZdaHIYUtvMO9OLi4K4Kh4pICN.jpg', images: ['https://cdn9.ouedkniss.com/360/medias/announcements/images/DkKlQY/ejt7cDYDD2gDwVEZdaHIYUtvMO9OLi4K4Kh4pICN.jpg'], sizes: '800x600x300 mm', colors: 'Gris', stock: 12, featured: true, rating: 4.8, desc: "Armoire de distribution pour environnements industriels. Construction solide en tôle d'acier avec portes verrouillables, idéale pour la protection des disjoncteurs.", specs: { voltage: "380V / 400V", material: "Acier galvanisé", safety: "IP54 / IK10", modules: "Configurable", standards: "IEC 61439" } },
+                { id: '6', name_ar: 'ثريا صالون مودرن بتصميم راقٍ', name_fr: 'Lustre Moderne Salon Design Élégant', price: 18500, category: 'ثريات وإنارة داخلية', market: 'local', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkBvSyAMFeesm-R4l1deMAe954hslBh-Nr_-scnXK6Ae3MqvLIcPwcC7Lr&s=10', images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkBvSyAMFeesm-R4l1deMAe954hslBh-Nr_-scnXK6Ae3MqvLIcPwcC7Lr&s=10'], sizes: '60cm Diamètre', colors: 'Blanc chaud', stock: 22, featured: false, rating: 4.7, desc: "Lustre décoratif contemporain idéal pour illuminer les grands salons avec une lumière chaleureuse et un esthétisme raffiné.", specs: { voltage: "220V", sockets: "6 x E27", material: "Métal verni et acrylique", safety: "IP20", standards: "CE, Standard" } },
+                { id: '7', name_ar: 'مأخذ كهربائي جداري مزدوج عالي الجودة', name_fr: 'Prise Murale Électrique Double standard', price: 420, category: 'مشاريع وورشات', market: 'local', img: 'https://tacatop.com/img/p/1/5/5/2/5/15525.jpg', images: ['https://tacatop.com/img/p/1/5/5/2/5/15525.jpg'], sizes: 'Standard', colors: 'Blanc', stock: 400, featured: false, rating: 4.6, desc: "Double prise électrique murale pour installations résidentielles encastrées. Conçue pour une conductivité maximale et une durabilité accrue.", specs: { current: "16A", voltage: "250V", material: "Polycarbonate ignifuge", safety: "Avec obturateur de sécurité", standards: "NF standard" } },
+                { id: '8', name_ar: 'مصباح ليد اقتصادي بقوة 12 واط', name_fr: 'Ampoule LED Éco 12W Blanche', price: 250, category: 'ثريات وإنارة داخلية', market: 'local', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSj4MwdYv44s49vNOPzGnt4ZIq6c7tUY6wGap3iozzSXg&s=10', images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSj4MwdYv44s49vNOPzGnt4ZIq6c7tUY6wGap3iozzSXg&s=10'], sizes: 'A60 E27', colors: 'Blanc Froid', stock: 1200, featured: false, rating: 4.5, desc: "Ampoule LED à faible consommation d'énergie offrant une lumière claire et instantanée. Longue durée de vie allant jusqu'à 25 000 heures.", specs: { voltage: "220-240V", power: "12W (équivaut à 100W)", base: "E27", safety: "IP20", standards: "CE" } },
+                { id: '9', name_ar: 'علبة رطوبة متينة وتوصيل للمشاريع والورشات', name_fr: 'Boîtier de Raccordement Pro Hermétique IP55', price: 1650, category: 'مشاريع وورشات', market: 'local', img: 'https://www.atelierdecoalgerie.com/wp-content/uploads/2025/12/M-02685P-5.jpg', images: ['https://www.atelierdecoalgerie.com/wp-content/uploads/2025/12/M-02685P-5.jpg'], sizes: '150x110x70 mm', colors: 'Gris', stock: 95, featured: false, rating: 4.6, desc: "Boîte de jonction étanche idéale pour la dérivation des câbles dans les environnements poussiéreux ou exposés à l'humidité.", specs: { material: "Plastique robuste antichoc", safety: "IP55 / Résistant aux UV", entry: "10 presse-étoupes", standards: "NFC EN 60670" } }
             ],
             banners: [
-                { id:'b1', img:'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=1000', title_ar: 'حلول كهربائية وإنارة بأعلى معايير الأمان', title_fr: 'Solutions Électriques & Éclairages aux Normes Mondiales', desc_ar: 'تأمين المشاريع، الورشات، الإنارة المنزلية والعمومية بأسعار منافسة', desc_fr: 'Câbles de puissance, luminaires et matériel certifié pour tous vos projets' }
+                { id:'b1', img:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiX-m-v8cQnB69za5DZhimFa2kUiSVv1x-3SuO2AGUNjwE2AJ7EvBz8w1tUpr84knpvp9iLnvQq1FmshR9gQ60umsDbGJGTeQvLUdiTNUBl4JaULN7TfKlKBz06PwQpY6thqRHs8LmNMdOuiLqW5QsxWXCFZDgwvedgFKpgsMQhD9Wy3dN80DvUoHr9A4k/s1983/1000023676.png', title_ar: 'حلول كهربائية وإنارة بأعلى معايير الأمان', title_fr: 'Solutions Électriques & Éclairages aux Normes Mondiales', desc_ar: 'تأمين المشاريع، الورشات، الإنارة المنزلية والعمومية بأسعار منافسة', desc_fr: 'Câbles de puissance, luminaires et matériel certifié pour tous vos projets' }
             ],
             orders: [], customOrders: [], accounting: [],
             categories: [
-                {id:'c1', name_ar:'كابلات وتوصيلات', name_fr:'Câbles & Conduits', sub_ar:'كابلات طاقة واتصالات', sub_fr:'Câbles de puissance', img:'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600'},
-                {id:'c2', name_ar:'ثريات وإنارة داخلية', name_fr:'Lustres & Intérieur', sub_ar:'ثريات كلاسيكية وعصرية', sub_fr:'Lustres et éclairages chics', img:'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600'},
-                {id:'c3', name_ar:'الإنارة العمومية والخارجية', name_fr:'Éclairage Public & Extérieur', sub_ar:'إنارة شوارع ومساحات كبرى', sub_fr:'Projecteurs et lanternes IP66', img:'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600'},
-                {id:'c4', name_ar:'مشاريع وورشات', name_fr:'Équipements Chantiers', sub_ar:'لوحات ومعدات توزيع صناعية', sub_fr:'Coffrets et tableaux électriques', img:'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=600'}
+                {id:'c1', name_ar:'كابلات وتوصيلات', name_fr:'Câbles & Conduits', sub_ar:'كابلات طاقة واتصالات', sub_fr:'Câbles de puissance', img:'https://www.materielelectrique.com/media/product_image/0006/54/noname_cbp01394734_553580_product_image_d_large.jpeg'},
+                {id:'c2', name_ar:'ثريات وإنارة داخلية', name_fr:'Lustres & Intérieur', sub_ar:'ثريات كلاسيكية وعصرية', sub_fr:'Lustres et éclairages chics', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkBvSyAMFeesm-R4l1deMAe954hslBh-Nr_-scnXK6Ae3MqvLIcPwcC7Lr&s=10'},
+                {id:'c3', name_ar:'الإنارة العمومية والخارجية', name_fr:'Éclairage Public & Extérieur', sub_ar:'إنارة شوارع ومساحات كبرى', sub_fr:'Projecteurs et lanternes IP66', img:'https://storage.googleapis.com/stateless-site-mougins/2020/04/eclairage_public.jpg'},
+                {id:'c4', name_ar:'مشاريع وورشات', name_fr:'Équipements Chantiers', sub_ar:'لوحات ومعدات توزيع صناعية', sub_fr:'Coffrets et tableaux électriques', img:'https://cdn9.ouedkniss.com/360/medias/announcements/images/DkKlQY/ejt7cDYDD2gDwVEZdaHIYUtvMO9OLi4K4Kh4pICN.jpg'}
             ],
             wilayas: [
                 {id: 31, name_ar: 'وهران', name_fr: 'Oran', price_desk: 400, price_home: 800},
@@ -1350,7 +1358,6 @@
             document.getElementById('prod-stock').value = '10';
             document.getElementById('prod-featured').checked = false;
             
-            // تعبئة تصنيفات المنتجات
             const catSelect = document.getElementById('prod-category');
             catSelect.innerHTML = window.siteState.categories.map(c=>`<option value="${c.name_ar}">${c.name_fr}</option>`).join('');
             
@@ -1371,7 +1378,6 @@
             document.getElementById('prod-desc').value = p.desc||'';
             document.getElementById('prod-featured').checked = p.featured||false;
             
-            // تعبئة المواصفات الفنية
             document.getElementById('spec-voltage').value = p.specs?.voltage || '220-240V';
             document.getElementById('spec-power').value = p.specs?.power || '';
             document.getElementById('spec-safety').value = p.specs?.safety || 'IP20';
@@ -1443,7 +1449,6 @@
         };
 
         window.openCategoryModal = () => {
-            // إضافة الفئة
             const ar = prompt("Nom Arabe:");
             const fr = prompt("Nom Français:");
             if(ar && fr) {
