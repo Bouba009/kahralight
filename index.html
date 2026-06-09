@@ -6,6 +6,21 @@
     <title>KAHRALIGHT | Matériel Électrique, Éclairage & Lustres</title>
 
     <script>
+        // تنظيف ذاكرة التخزين المؤقتة القديمة تلقائياً لمنع أي تعارض في البيانات
+        (function() {
+            try {
+                const dbStr = localStorage.getItem('mobiliaDB');
+                if (dbStr) {
+                    const db = JSON.parse(dbStr);
+                    if (db.products && db.products[0] && (db.products[0].name_ar.includes('كرسي') || db.products[0].name_fr.includes('Chaise'))) {
+                        localStorage.removeItem('mobiliaDB'); // حذف كاش كورسّي القديم
+                        localStorage.removeItem('siteSettings');
+                    }
+                }
+            } catch(e){}
+        })();
+    </script>
+    <script>
         (function() {
             try {
                 var test = '__storage_test__';
@@ -41,12 +56,11 @@
 
     <style>
         :root {
-            --primary: #e67e22; /* لون برتقالي نحاسي يعبر عن الكهرباء والطاقة */
-            --secondary: #f39c12;
+            --primary: #e67e22; /* برتقالي كهربائي نحاسي */
+            --secondary: #d35400;
             --danger: #e74c3c;
             --success: #2ecc71;
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            
             --bg-body: #f8f9fa;
             --bg-card: #ffffff;
             --text-main: #1a1a1a;
@@ -69,150 +83,51 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        
-        body { 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            overflow-x: hidden; 
-            transition: background-color 0.3s ease, color 0.3s ease; 
-            padding-bottom: 100px; 
-        }
-        
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: background-color 0.3s, color 0.3s; padding-bottom: 100px; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popupAnim { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes slideZoom {
-            from { transform: scale(1.0); opacity: 0.9; }
-            to { transform: scale(1.04); opacity: 1; }
-        }
-
+        @keyframes slideZoom { from { transform: scale(1.0); opacity: 0.9; } to { transform: scale(1.04); opacity: 1; } }
         .fade-in { animation: fadeIn 0.5s ease-out; }
 
-        #global-loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--bg-card); z-index: 99999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
-        }
-        .global-spinner {
-            border: 5px solid var(--border-color); border-top: 5px solid var(--primary);
-            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px;
-        }
+        #global-loader { position: fixed; top:0; left:0; width:100%; height:100vh; background: var(--bg-card); z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition: opacity 0.5s; }
+        .global-spinner { border: 5px solid var(--border-color); border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        #frontend-app {
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        #frontend-app { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; align-items: stretch; }
 
         /* --- Header --- */
-        header { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000; transition: var(--transition); }
+        header { background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000; transition: var(--transition); }
         .header-top { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; }
-        
         .logo { font-size: 26px; font-weight: 800; cursor: pointer; display:flex; align-items:center; gap: 8px;}
-        .logo i { 
-            color: var(--primary); 
-            font-size: 24px; 
-            display: inline-block;
-            animation: chairWiggle 10s ease-in-out infinite;
-        }
-        
-        @keyframes chairWiggle {
-            0%, 90%, 100% { transform: rotate(0deg) scale(1); }
-            92% { transform: rotate(-15deg) scale(1.15); }
-            94% { transform: rotate(15deg) scale(1.15); }
-            96% { transform: rotate(-10deg) scale(1.05); }
-            98% { transform: rotate(10deg) scale(1.05); }
-        }
-        
-        .logo-brand {
-            color: var(--primary) !important;
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            animation: logoPulse 3s ease-in-out infinite;
-            display: inline-block;
-        }
+        .logo i { color: var(--primary); font-size: 24px; animation: chairWiggle 10s ease-in-out infinite; }
+        .logo-brand { color: var(--primary) !important; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; animation: logoPulse 3s ease-in-out infinite; }
+        @keyframes logoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+        /* --- مبدل السوق المحلي والتصدير --- */
+        .market-toggle-container { display: flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 6px; margin: 20px 5% 10px; box-shadow: var(--shadow); gap: 10px; }
+        .market-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: transparent; color: var(--text-muted); font-size: 15px; font-weight: bold; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .market-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
 
         .search-bar { display: flex; flex: 1; margin: 0 20px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 30px; padding: 5px 18px; align-items: center; transition: var(--transition); }
         .search-bar input { border: none; background: transparent; width: 100%; outline: none; padding: 8px; font-size:14px; color: var(--text-main); }
         .search-bar i { color: var(--text-muted); font-size: 16px; margin-left: 8px;}
         
         .header-icons { display: flex; align-items: center; gap: 15px; }
-        .header-icons i { font-size: 20px; cursor: pointer; color: var(--text-main); transition: var(--transition); }
+        .header-icons i { font-size: 20px; cursor: pointer; color: var(--text-main); }
         .header-icons i:hover { color: var(--primary); }
-        
-        .lang-btn { cursor:pointer; font-weight:bold; background:var(--primary); color:white; padding:5px 12px; border-radius:20px; border:none; font-size: 12px; transition: var(--transition); }
-        .theme-toggle-btn { background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; transition: var(--transition); }
-
-        /* --- مبدل السوق المحلي والتصدير الفاخر --- */
-        .market-toggle-container {
-            display: flex;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 6px;
-            margin: 20px 5% 10px;
-            box-shadow: var(--shadow);
-            gap: 10px;
-        }
-        .market-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .market-btn.active {
-            background: var(--primary);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
-        }
+        .lang-btn { cursor:pointer; font-weight:bold; background:var(--primary); color:white; padding:5px 12px; border-radius:20px; border:none; font-size: 12px; }
+        .theme-toggle-btn { background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; }
 
         /* --- القائمة الجانبية --- */
-        .sidebar { 
-            position: fixed; 
-            top: 0; 
-            width: 280px; 
-            height: 100vh; 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            background: rgba(255, 255, 255, 0.15);
-            border-left: 1px solid rgba(255, 255, 255, 0.25); 
-            border-right: 1px solid rgba(255, 255, 255, 0.25); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); 
-            z-index: 1001; 
-            transition: var(--transition); 
-            padding: 30px 20px; 
-        }
-        body.dark-mode .sidebar {
-            background: rgba(0, 0, 0, 0.4);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
+        .sidebar { position: fixed; top: 0; width: 280px; height: 100vh; backdrop-filter: blur(25px); background: rgba(255, 255, 255, 0.15); border-left: 1px solid rgba(255, 255, 255, 0.25); border-right: 1px solid rgba(255, 255, 255, 0.25); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); z-index: 1001; transition: var(--transition); padding: 30px 20px; }
+        body.dark-mode .sidebar { background: rgba(0, 0, 0, 0.4); border-left: 1px solid rgba(255, 255, 255, 0.1); border-right: 1px solid rgba(255, 255, 255, 0.1); }
         html[dir="rtl"] .sidebar { right: 0; transform: translateX(280px); }
         html[dir="rtl"] .sidebar.active { transform: translateX(0); }
         html[dir="ltr"] .sidebar { left: 0; transform: translateX(-280px); }
         html[dir="ltr"] .sidebar.active { transform: translateX(0); }
-        
         .close-sidebar { font-size: 24px; cursor: pointer; color: var(--danger); text-align: left; display: block; margin-bottom: 30px; }
         .sidebar ul li { padding: 15px 10px; border-bottom: 1px solid var(--border-color); font-size: 16px; cursor: pointer; color: var(--text-main); transition: var(--transition); display: flex; align-items: center; gap: 12px; border-radius: 8px;}
         .sidebar ul li:hover { background: rgba(230, 126, 34, 0.15); color: var(--primary); }
@@ -223,220 +138,79 @@
         .slide { width: 100%; height: 100%; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; background-size: cover; background-position: center; cursor:pointer; display: flex; align-items: center; padding: 0 10%;}
         .slide.active { opacity: 1; animation: slideZoom 6s infinite alternate; }
         .slide-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.2)); z-index: 1;}
-        
         .slide-content { position: relative; z-index: 2; color: white; max-width: 500px; text-align: left;}
         html[dir="rtl"] .slide-content { text-align: right; }
         .slide-content h1 { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
         .slide-content p { font-size: 14px; margin-bottom: 15px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); opacity: 0.9; }
         .slide-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: white; padding: 10px 22px; border-radius: 30px; font-weight: bold; transition: var(--transition); border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-size: 13px; }
-        
         .slider-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 3; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: var(--transition); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; }
         .dot.active { width: 20px; border-radius: 8px; background: var(--primary); }
 
         /* --- قسم الفئات السلايدر التلقائي --- */
         .categories-title { padding: 25px 5% 10px; font-size: 20px; font-weight: 700; color: var(--text-main); max-width: 1200px; margin: 0 auto; width: 100%; text-align: left; }
         html[dir="rtl"] .categories-title { text-align: right; }
-        
-        .categories-container-scroller { 
-            padding: 10px 5% 20px; 
-            display: flex; 
-            gap: 15px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            width: 100%; 
-            overflow-x: auto; 
-            scroll-behavior: smooth;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .categories-container-scroller::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category-card { 
-            position: relative; 
-            height: 120px; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            box-shadow: var(--shadow); 
-            cursor: pointer; 
-            transition: var(--transition); 
-            flex: 0 0 180px;
-            width: 180px;
-        }
+        .categories-container-scroller { padding: 10px 5% 20px; display: flex; gap: 15px; max-width: 1200px; margin: 0 auto; width: 100%; overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;}
+        .categories-container-scroller::-webkit-scrollbar { display: none; }
+        .category-card { position: relative; height: 120px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: var(--shadow); cursor: pointer; transition: var(--transition); flex: 0 0 180px; width: 180px;}
         .category-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        
-        .category-card-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            z-index: 1; 
-            transition: var(--transition); 
-        }
+        .category-card-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; transition: var(--transition); }
         .category-card:hover .category-card-img { transform: scale(1.08); }
         .category-card-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%); z-index: 2; }
-        
         .category-card-info { position: absolute; bottom: 12px; left: 12px; right: 12px; z-index: 3; color: #ffffff; display: flex; justify-content: space-between; align-items: flex-end; text-align: left; }
         html[dir="rtl"] .category-card-info { text-align: right; }
         .category-card-info h3 { font-size: 14px; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
         .category-card-info p { font-size: 10px; color: rgba(255, 255, 255, 0.85); }
-        .category-card-btn { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: var(--transition); }
+        .category-card-btn { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; font-size: 11px; }
 
         /* --- Products Grid --- */
         .products-section { padding: 20px 5%; max-width: 1200px; margin: 0 auto; width: 100%; }
         .section-title { text-align: left; font-size: 22px; font-weight: 800; margin-bottom: 25px; position: relative; color: var(--text-main); }
         html[dir="rtl"] .section-title { text-align: right; }
-        
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         @media(min-width:768px){ .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
         
-        .product-card { 
-            background: var(--bg-card); 
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: none; 
-            box-shadow: var(--shadow); 
-            transition: var(--transition); 
-            cursor: pointer; 
-            position:relative; 
-            display:flex; 
-            flex-direction:column; 
-            padding: 12px;
-        }
+        .product-card { background: var(--bg-card); border-radius: 20px; overflow: hidden; border: none; box-shadow: var(--shadow); transition: var(--transition); cursor: pointer; position:relative; display:flex; flex-direction:column; padding: 12px;}
         .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        
         .product-img-wrapper { width: 100%; aspect-ratio: 1 / 1; border-radius: 15px; overflow: hidden; background: #fdfdfd; position: relative; }
         body.dark-mode .product-img-wrapper { background: #151515; }
         .product-img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
         
-        /* شارة المعايير الأوروبية CE للتصدير */
-        .eu-standard-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #003399;
-            color: #ffcc00;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 10px rgba(0, 51, 153, 0.3);
-            z-index: 10;
-        }
-
-        .fav-btn { position: absolute; top: 10px; left: 10px; width: 34px; height: 34px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(5px); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; color: var(--text-muted); cursor: pointer; transition: var(--transition); z-index: 10;}
+        /* شارة المعايير الأوروبية CE */
+        .eu-standard-badge { position: absolute; top: 10px; right: 10px; background: #003399; color: #ffcc00; padding: 4px 10px; border-radius: 30px; font-size: 10px; font-weight: 900; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 10px rgba(0, 51, 153, 0.3); z-index: 10;}
+        .fav-btn { position: absolute; top: 10px; left: 10px; width: 34px; height: 34px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(5px); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; color: var(--text-muted); cursor: pointer; z-index: 10;}
         .fav-btn:hover { transform: scale(1.1); color: var(--danger); }
         .fav-btn.active { color: var(--danger); }
 
         .product-info { padding: 12px 4px 4px; display:flex; flex-direction:column; justify-content:space-between; flex: 1; }
         .product-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.4; text-align: left; }
         html[dir="rtl"] .product-title { text-align: right; }
-        
         .product-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
         .product-price-wrapper { text-align: left; }
         html[dir="rtl"] .product-price-wrapper { text-align: right; }
         .product-price { color: var(--text-main); font-size: 16px; font-weight: 800; display: block; }
         .old-price { text-decoration: line-through; color: var(--text-muted); font-size: 12px; }
-        
         .rating-box { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-muted); margin-top: 4px;}
         .rating-box i { color: #f1c40f; }
+        .add-to-cart-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; border: none; display: flex; justify-content: center; align-items: center; font-size: 14px; }
 
-        .add-to-cart-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; border: none; display: flex; justify-content: center; align-items: center; font-size: 14px; cursor: pointer; transition: var(--transition); }
+        /* --- المستندات التقنية وشهادات التصدير الرسمية --- */
+        .tech-docs-container { margin-top: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; box-shadow: var(--shadow); }
+        .tech-docs-header { display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .tech-docs-header h3 { font-size: 18px; font-weight: 800; }
+        .tech-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .tech-table td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .tech-table td:first-child { font-weight: bold; color: var(--text-muted); width: 40%; }
+        .tech-table td:last-child { color: var(--text-main); }
+        .doc-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media(max-width: 500px) { .doc-btn-group { grid-template-columns: 1fr; } }
+        .btn-doc { background: #34495e; color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); }
+        .btn-doc:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-doc.btn-ce { background: #003399; }
 
-        /* --- البطاقة التقنية ومستندات المطابقة الرسمية --- */
-        .tech-docs-container {
-            margin-top: 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-        .tech-docs-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        .tech-docs-header h3 {
-            font-size: 18px;
-            font-weight: 800;
-        }
-        .tech-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .tech-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 14px;
-        }
-        .tech-table td:first-child {
-            font-weight: bold;
-            color: var(--text-muted);
-            width: 40%;
-        }
-        .tech-table td:last-child {
-            color: var(--text-main);
-        }
-        .doc-btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        @media(max-width: 500px) {
-            .doc-btn-group { grid-template-columns: 1fr; }
-        }
-        .btn-doc {
-            background: #34495e;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: var(--transition);
-        }
-        .btn-doc:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        .btn-doc.btn-ce {
-            background: #003399;
-        }
-
-        /* --- مظهر مستند الشهادة والبطاقة التقنية المنبثقة للتوليد التلقائي --- */
-        .printable-doc {
-            padding: 40px;
-            font-family: 'Tajawal', sans-serif;
-            background: #ffffff;
-            color: #000000;
-            border: 10px double #003399;
-            position: relative;
-        }
-        .printable-doc::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border: 2px solid #003399;
-            margin: 5px;
-            pointer-events: none;
-        }
+        /* --- المستند الرسمي القابل للطباعة والتوليد --- */
+        .printable-doc { padding: 40px; font-family: 'Tajawal', sans-serif; background: #ffffff; color: #000000; border: 10px double #003399; position: relative; }
+        .printable-doc::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid #003399; margin: 5px; pointer-events: none; }
 
         /* --- Features Row --- */
         .features-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 30px 5%; margin-top: 20px; max-width: 1200px; margin-left: auto; margin-right: auto; }
@@ -446,64 +220,24 @@
         .feature-item h4 { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
         .feature-item p { font-size: 11px; color: var(--text-muted); }
 
-        /* --- ظهور المنتج بحركة من الأعلى ودعم التمرير للاسفل --- */
-        .product-details-page { 
-            display: none; 
-            padding: 20px 5%; 
-            background: var(--bg-card); 
-            min-height: 80vh; 
-            position: relative; 
-            transition: var(--transition); 
-            animation: slideFromTop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
-        }
-        @keyframes slideFromTop {
-            0% { transform: translateY(-40px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
+        /* --- تفاصيل المنتج --- */
+        .product-details-page { display: none; padding: 20px 5%; background: var(--bg-card); min-height: 80vh; position: relative; animation: slideFromTop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideFromTop { 0% { transform: translateY(-40px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         .details-container { display: flex; flex-direction:column; gap: 20px; }
         @media(min-width:768px){ .details-container {flex-direction:row;} .details-img-wrap { max-width: 50%; } }
         .details-img-wrap { flex: 1; text-align:center;}
         .details-img-wrap img { width: 100%; max-width:450px; border-radius: 20px; aspect-ratio:1/1; object-fit:cover; box-shadow: var(--shadow);}
         .details-info { flex: 1; }
         
-        /* معالجة استمارة وخانات الادخال لتظهر بتباين ممتاز في الوضع العادي والليل */
-        .order-form { 
-            background: #f1f3f6;
-            padding: 30px; 
-            border-radius: 24px; 
-            margin-top: 20px; 
-            box-shadow: var(--shadow); 
-            border: 1px solid #ccd1d9; 
-            transition: var(--transition); 
-        }
-        body.dark-mode .order-form {
-            background: #1c1c1e;
-            border: 1px solid #2c2c2e;
-        }
-
+        .order-form { background: #f1f3f6; padding: 30px; border-radius: 24px; margin-top: 20px; box-shadow: var(--shadow); border: 1px solid #ccd1d9; transition: var(--transition); }
+        body.dark-mode .order-form { background: #1c1c1e; border: 1px solid #2c2c2e; }
         .pro-form-group { margin-bottom: 18px; }
         .pro-form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size:14px; color: var(--text-main); }
         .input-icon-wrap { position: relative; }
         .input-icon-wrap i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         
-        .pro-input, select.pro-input, .form-control { 
-            width: 100%; 
-            padding: 14px 40px 14px 15px; 
-            border: 1px solid #ccd1d9;
-            border-radius: 14px; 
-            outline: none; 
-            transition: var(--transition); 
-            font-family: inherit; 
-            font-size: 15px; 
-            background: #ffffff;
-            color: #1a1a1a; 
-        }
-        body.dark-mode .pro-input, body.dark-mode select.pro-input, body.dark-mode .form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
+        .pro-input, select.pro-input, .form-control { width: 100%; padding: 14px 40px 14px 15px; border: 1px solid #ccd1d9; border-radius: 14px; outline: none; transition: var(--transition); font-size: 15px; background: #ffffff; color: #1a1a1a; }
+        body.dark-mode .pro-input, body.dark-mode select.pro-input, body.dark-mode .form-control { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; }
         .pro-input:focus, .form-control:focus { border-color: var(--primary); background: var(--bg-card); box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.15); }
         .pro-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
@@ -516,136 +250,74 @@
         .btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight:bold; cursor: pointer; transition: var(--transition); box-shadow: 0 6px 15px rgba(230, 126, 34, 0.2);}
         .btn:hover { background: var(--text-main); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);}
 
-        /* --- الأزرار العائمة المتوازية في نفس السطر --- */
-        .whatsapp-fab { 
-            position: fixed; bottom: 100px; left: 20px; width: 56px; height: 56px; border-radius: 50%; 
-            background: #25d366; color: white; display: flex; justify-content: center; align-items: center; 
-            font-size: 28px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1002; cursor: pointer; 
-            transition: var(--transition); 
-        }
-        .whatsapp-fab:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
+        /* --- الأزرار العائمة --- */
+        .whatsapp-fab { position: fixed; bottom: 100px; left: 20px; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: white; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1002; cursor: pointer; transition: var(--transition); }
+        .whatsapp-fab:hover { transform: scale(1.1) translateY(-3px); }
 
         /* --- Bottom Navigation Bar --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; 
-            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; 
-            align-items: center; z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.05); transition: var(--transition);
-        }
-        .bottom-nav-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-muted); font-size: 12px; font-weight: bold; cursor: pointer; 
-            transition: var(--transition); flex: 1; height: 100%;
-        }
-        .bottom-nav-item i { font-size: 20px; margin-bottom: 5px; transition: var(--transition); }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: var(--glass-bg); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.05); }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px; font-weight: bold; cursor: pointer; transition: var(--transition); flex: 1; height: 100%;}
+        .bottom-nav-item i { font-size: 20px; margin-bottom: 5px; }
         .bottom-nav-item:hover, .bottom-nav-item.active { color: var(--primary); }
         .bottom-nav-item.active i { transform: translateY(-3px); }
 
         /* --- Modals --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: var(--bg-card); padding: 30px; border-radius: 24px; width: 90%; max-width: 500px; position: relative; animation: popupAnim 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-height:90vh; overflow-y:auto; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
-        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 22px; cursor: pointer; color: var(--text-muted); z-index:10; transition: var(--transition); }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 22px; cursor: pointer; color: var(--text-muted); z-index:10; }
         .close-modal:hover { color: var(--danger); }
         .success-checkmark { font-size: 60px; color: var(--success); text-align: center; display: block; margin-bottom: 15px; }
 
         /* --- Footer --- */
         footer { background: var(--bg-card); color: var(--text-main); padding: 40px 5% 30px; margin-top: 40px; border-top: 1px solid var(--border-color); transition: var(--transition); max-width: 1200px; margin-left: auto; margin-right: auto; width: 100%; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-        
-        .social-icons {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            margin-top: 15px;
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-        
-        .social-icons a.social-btn { 
-            font-size: 20px; 
-            display: inline-flex;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            border: 1.5px solid currentColor;
-            transition: none;
-        }
-        
-        .social-icons a.instagram {
-            color: #e1306c !important;
-            background: rgba(225, 48, 108, 0.08) !important;
-        }
-        .social-icons a.facebook {
-            color: #1877f2 !important;
-            background: rgba(24, 119, 242, 0.08) !important;
-        }
-        .social-icons a.tiktok {
-            color: #1a1a1a !important;
-            background: rgba(26, 26, 26, 0.08) !important;
-        }
-        body.dark-mode .social-icons a.tiktok {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.08) !important;
-        }
-        
-        .footer-links li { margin-bottom: 10px; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: var(--transition); }
+        .social-icons { display: flex; gap: 12px; align-items: center; margin-top: 15px; }
+        .social-icons a.social-btn { font-size: 20px; display: inline-flex; width: 38px; height: 38px; border-radius: 50%; align-items: center; justify-content: center; text-decoration: none; border: 1.5px solid currentColor; }
+        .social-icons a.instagram { color: #e1306c !important; background: rgba(225, 48, 108, 0.08) !important; }
+        .social-icons a.facebook { color: #1877f2 !important; background: rgba(24, 119, 242, 0.08) !important; }
+        .social-icons a.tiktok { color: #1a1a1a !important; background: rgba(26, 26, 26, 0.08) !important; }
+        body.dark-mode .social-icons a.tiktok { color: #ffffff !important; background: rgba(255, 255, 255, 0.08) !important; }
+        .footer-links li { margin-bottom: 10px; cursor: pointer; font-size: 14px; color: var(--text-muted); }
         .footer-links li:hover { color: var(--primary); }
-        
-        .map-container { 
-            margin-top: 10px; 
-            border: 1px solid var(--primary); 
-            border-radius: 18px; 
-            overflow: hidden; 
-            box-shadow: var(--shadow); 
-        }
+        .map-container { margin-top: 10px; border: 1px solid var(--primary); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
         .map-container iframe { width: 100%; height: 180px; border: none; }
 
         /* --- Admin Panel --- */
         #admin-login-screen { display: none; height: 100vh; background: var(--bg-body); justify-content: center; align-items: center; }
         .login-box { background: var(--bg-card); padding: 40px 30px; border-radius: 24px; width: 90%; max-width:400px; text-align: center; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
-        
         #admin-panel { display: none; display: flex; height: 100vh; background: var(--bg-body); overflow: hidden; direction: ltr;}
-        .admin-sidebar { width: 260px; background: var(--bg-card); color: var(--text-main); display: flex; flex-direction: column; overflow-y: auto; transition:0.3s; border-right: 1px solid var(--border-color); }
+        .admin-sidebar { width: 260px; background: var(--bg-card); color: var(--text-main); display: flex; flex-direction: column; overflow-y: auto; border-right: 1px solid var(--border-color); }
         .admin-logo { padding: 25px; text-align: center; font-size: 22px; font-weight: bold; border-bottom: 1px solid var(--border-color); color: var(--primary); display:flex; justify-content:center; align-items:center;}
-        .admin-logo img { max-height: 35px; margin-left: 8px; }
-        .admin-nav { list-style: none; padding: 10px; margin: 0; }
+        .admin-nav { list-style: none; padding: 10px; }
         .admin-nav li { padding: 14px 20px; cursor: pointer; border-radius: 12px; margin-bottom: 5px; transition: 0.3s; font-size:15px; display: flex; align-items: center;}
         .admin-nav li:hover, .admin-nav li.active { background: var(--primary); color: white; }
         .admin-nav li i { margin-right: 10px; width:20px; text-align:center;}
-        
         .admin-content { flex: 1; padding: 25px; overflow-y: auto; background: var(--bg-body); }
         .admin-header { display: flex; justify-content: space-between; background: var(--bg-card); padding: 15px 25px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 25px; align-items:center;}
         .mobile-admin-toggle { display:none; font-size:24px; cursor:pointer;}
         @media(max-width:768px){ 
-            .admin-sidebar{ position:absolute; left:-260px; height:100%; z-index:1000;} 
+            .admin-sidebar{ position:absolute; left:-260px; height:100%; z-index:1000; transition:0.3s;} 
             .admin-sidebar.show{ left:0; }
             .mobile-admin-toggle{ display:block; }
         }
 
         .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .dash-card { padding: 20px 15px; border-radius: 16px; color: white; cursor: pointer; text-align: center; box-shadow: var(--shadow); transition: var(--transition); }
+        .dash-card { padding: 20px 15px; border-radius: 16px; color: white; cursor: pointer; text-align: center; box-shadow: var(--shadow); }
         .dash-card h3 { font-size: 30px; margin-bottom: 5px; font-weight: 800; }
         .dash-card p { font-size: 14px; opacity: 0.9;}
         .c-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
         .c-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
         .c-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-        .c-purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
         .c-orange { background: linear-gradient(135deg, #f39c12, #d35400); }
-        .c-dark { background: linear-gradient(135deg, #34495e, #2c3e50); }
 
         .admin-table-wrap { overflow-x:auto; background:var(--bg-card); border-radius:16px; border: 1px solid var(--border-color); box-shadow:var(--shadow); }
         .admin-table { width: 100%; border-collapse: collapse; min-width:600px;}
-        .admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size:14px; vertical-align: middle; color: var(--text-main); }
-        .admin-table th { background: var(--bg-body); color: var(--text-main); font-weight: bold; }
-        
+        .admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size:14px; color: var(--text-main); }
+        .admin-table th { background: var(--bg-body); font-weight: bold; }
         .tab-section { display: none; }
         .tab-section.active { display: block; animation: fadeIn 0.4s; }
         .form-row { display: flex; flex-wrap:wrap; gap: 10px; margin-bottom: 10px;}
         .form-row > div { flex: 1; min-width:150px;}
-
     </style>
 </head>
 <body>
@@ -665,7 +337,6 @@
             <div class="header-top">
                 <i class="fas fa-bars header-icons" id="menu-btn"></i>
                 <div class="logo" id="site-logo" onclick="showPage('home')" style="cursor:pointer;"><i class="fas fa-bolt"></i> <span class="logo-brand">kahralight</span></div>
-                
                 <div class="header-icons">
                     <button class="theme-toggle-btn" onclick="toggleDarkMode()" title="Mode sombre/lumineux">
                         <i class="fas fa-moon" id="theme-icon"></i>
@@ -673,11 +344,10 @@
                     <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle">AR</button>
                 </div>
             </div>
-            
             <div style="padding: 0 5% 15px;">
                 <div class="search-bar" style="margin: 0;">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder="Rechercher un produit ou luminaire..." onkeyup="frontendSearch()">
+                    <input type="text" id="search-input" placeholder="Rechercher un produit, câble, luminaire..." onkeyup="frontendSearch()">
                 </div>
             </div>
         </header>
@@ -698,13 +368,13 @@
                 <div class="hero-slider" id="hero-slider"></div>
             </div>
 
-            <!-- شريط الفلترة للسوق المحلي مقابل التصدير -->
+            <!-- شريط الفلترة للسوق المحلي ومطابقة التصدير الدولي -->
             <div class="market-toggle-container">
                 <button class="market-btn active" id="btn-market-local" onclick="toggleMarketFilter('local')">
                     <i class="fas fa-store"></i> <span data-ar="السوق المحلي" data-fr="Marché Local">Marché Local</span>
                 </button>
                 <button class="market-btn" id="btn-market-export" onclick="toggleMarketFilter('export')">
-                    <i class="fas fa-globe"></i> <span data-ar="جهة التصدير (معايير أوروبية)" data-fr="Export & Normes Européennes">Export (Normes EU)</span>
+                    <i class="fas fa-globe"></i> <span data-ar="جهة التصدير (معايير أوروبية)" data-fr="Exportation (Normes EU)">Exportation (Normes EU)</span>
                 </button>
             </div>
             
@@ -753,7 +423,7 @@
             <div class="footer-grid">
                 <div>
                     <h2 class="logo" style="color:var(--text-main);" id="footer-logo"><i class="fas fa-bolt"></i> <span class="logo-brand">kahralight</span></h2>
-                    <p style="margin-top:10px; font-size:14px;" data-ar="متجرك الأول لأرقى مصابيح الديكور، الثريات، الكابلات والتوصيلات الكهربائية الفاخرة." data-fr="Votre boutique professionnelle de câbles, luminaires, lustres et matériels électriques.">Votre boutique professionnelle de câbles, luminaires, lustres et matériels électriques.</p>
+                    <p style="margin-top:10px; font-size:14px;" data-ar="متجرك الأول لأرقى مصابيح الديكور، الثريات، الكابلات والتوصيلات الكهربائية الفاخرة." data-fr="Votre boutique des meilleurs câbles, luminaires, lustres et matériels électriques.">Votre boutique des meilleurs câbles, luminaires, lustres et matériels électriques.</p>
                     <div class="social-icons" id="footer-socials">
                         <a href="#" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="social-btn facebook"><i class="fab fa-facebook"></i></a>
@@ -797,18 +467,16 @@
         <div class="whatsapp-fab" id="whatsapp-fab" onclick="openWhatsapp()" style="position: fixed; bottom: 100px; left: 20px; z-index: 1002;"><i class="fab fa-whatsapp"></i></div>
     </div>
 
-    <!-- نافذة توليد البطاقة التقنية الرسمية القابلة للطباعة -->
+    <!-- نافذة البطاقة الفنية وشهادة المطابقة القابلة للتنزيل والطباعة كـ PDF -->
     <div class="modal" id="printable-doc-modal">
         <div class="modal-content" style="max-width:800px; padding:0; background:transparent; border:none;">
             <i class="fas fa-times close-modal" style="color:white; right:15px; top:15px; font-size:24px;" onclick="closeModal('printable-doc-modal')"></i>
             <div style="background:#ffffff; padding:20px; border-radius:12px; max-height:85vh; overflow-y:auto;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:15px;" class="no-print">
                     <button class="btn" style="width:auto; padding:10px 20px;" onclick="window.print()"><i class="fas fa-print"></i> <span data-ar="طباعة" data-fr="Imprimer">Imprimer</span></button>
-                    <button class="btn" style="width:auto; padding:10px 20px; background:#e67e22;" onclick="downloadPDF('printable-area-box', 'Document_Spec_KahraLight.pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+                    <button class="btn" style="width:auto; padding:10px 20px; background:#e67e22;" onclick="downloadPDF('printable-area-box', 'Document_Conformite_Kahralight.pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
                 </div>
-                <div id="printable-area-box">
-                    <!-- تتولد برمجياً بداخلها -->
-                </div>
+                <div id="printable-area-box"></div>
             </div>
         </div>
     </div>
@@ -822,6 +490,7 @@
         </div>
     </div>
 
+    <!-- نافذة المفضلة -->
     <div class="modal" id="favorites-modal">
         <div class="modal-content">
             <i class="fas fa-times close-modal" onclick="closeModal('favorites-modal')"></i>
@@ -834,7 +503,7 @@
         <div class="modal-content" style="text-align: center; max-width: 300px;">
             <i class="fas fa-check-circle success-checkmark"></i>
             <h3 data-ar="تم إرسال طلبك بنجاح!" data-fr="Envoyé avec succès!">Envoyé avec succès!</h3>
-            <p style="margin-top: 10px; color: var(--text-muted);" data-ar="سنتصل بك قريباً لتأكيد طلبك." data-fr="Nous vous contacterons bientôt.">Nous vous contacterons bientôt.</p>
+            <p style="margin-top: 10px; color: var(--text-muted);" data-ar="سنتصل بك قريباً لتأكيد طلبك." data-fr="Nous vous contacterons bientôt pour confirmer.">Nous vous contacterons bientôt.</p>
         </div>
     </div>
 
@@ -843,7 +512,7 @@
     <div class="modal" id="about-modal"><div class="modal-content"><i class="fas fa-times close-modal" onclick="closeModal('about-modal')"></i><h2 data-ar="من نحن" data-fr="À propos">À propos</h2><p id="txt-about" style="margin-top:10px; white-space:pre-wrap;"></p></div></div>
     <div class="modal" id="contact-modal"><div class="modal-content"><i class="fas fa-times close-modal" onclick="closeModal('contact-modal')"></i><h2 data-ar="اتصل بنا" data-fr="Contact">Contact</h2><p id="txt-contact" style="margin-top:10px; white-space:pre-wrap;"></p></div></div>
 
-    <!-- لوحة التحكم للإدارة -->
+    <!-- لوحة تحكم الإدارة -->
     <div id="admin-login-screen">
         <div class="login-box fade-in">
             <h2 style="color:var(--primary); margin-bottom: 20px;">DASHBOARD | KAHRALIGHT</h2>
@@ -903,7 +572,7 @@
                 </div>
             </div>
 
-            <!-- Orders Management Tab -->
+            <!-- Orders Tab -->
             <div id="tab-orders" class="tab-section">
                 <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
                     <h3 data-adm-ar="إدارة الطلبيات" data-adm-fr="Gestion des Commandes">Gestion des Commandes</h3>
@@ -943,14 +612,12 @@
                 <div class="products-grid" id="admin-categories-grid" style="grid-template-columns: repeat(auto-fill, minmax(150px,1fr));"></div>
             </div>
 
-            <!-- Banners & Design -->
+            <!-- Banners Tab -->
             <div id="tab-banners" class="tab-section">
                 <h3 data-adm-ar="البانرات وتغيير اللون" data-adm-fr="Bannières & Thème">Bannières & Thème</h3>
                 <div class="form-row" style="background:var(--bg-card); padding:15px; border-radius:10px; margin-top:15px; align-items:flex-end; border: 1px solid var(--border-color);">
                     <div><label data-adm-ar="صورة البانر" data-adm-fr="Image de la bannière">Image de la bannière</label><input type="file" id="banner-img" class="form-control" accept="image/*"></div>
-                    <div><label data-adm-ar="رابط التحويل" data-adm-fr="Lien de redirection">Lien de redirection</label>
-                        <input type="text" id="banner-link" class="form-control" placeholder="Lien (Optionnel)">
-                    </div>
+                    <div><label data-adm-ar="رابط التحويل" data-adm-fr="Lien de redirection">Lien de redirection</label><input type="text" id="banner-link" class="form-control" placeholder="Lien (Optionnel)"></div>
                     <div><button class="btn" onclick="addBanner()" data-adm-ar="إضافة البانر" data-adm-fr="Ajouter Bannière">Ajouter Bannière</button></div>
                 </div>
                 <div id="admin-banners-list" style="display:flex; gap:10px; overflow-x:auto; margin-top:15px;"></div>
@@ -988,11 +655,63 @@
         </div>
     </div>
 
+    <!-- نافذة إضافة وتعديل منتج للادارة لتفادي التعليق -->
+    <div class="modal" id="add-product-modal">
+        <div class="modal-content" style="max-width:550px;">
+            <i class="fas fa-times close-modal" onclick="closeModal('add-product-modal')"></i>
+            <h3 style="text-align:center; color:var(--primary); margin-bottom:15px;" data-adm-ar="إضافة / تعديل منتج" data-adm-fr="Ajouter / Modifier Produit">Ajouter / Modifier Produit</h3>
+            <form id="prod-form" onsubmit="event.preventDefault(); saveProduct();">
+                <input type="hidden" id="prod-id">
+                <div class="form-row">
+                    <div><label>Nom Arabe</label><input type="text" id="prod-name-ar" class="form-control" required></div>
+                    <div><label>Nom Français</label><input type="text" id="prod-name-fr" class="form-control" required></div>
+                </div>
+                <div class="form-row">
+                    <div><label>Prix (DA)</label><input type="number" id="prod-price" class="form-control" required></div>
+                    <div><label>Vieux Prix</label><input type="number" id="prod-old-price" class="form-control"></div>
+                </div>
+                <div class="form-row">
+                    <div><label>Marché / السوق</label><select id="prod-market" class="form-control"><option value="local">Local / محلي</option><option value="export">Export / تصدير</option></select></div>
+                    <div><label>Catégorie</label><select id="prod-category" class="form-control"></select></div>
+                </div>
+                <div class="form-row">
+                    <div><label>Stock</label><input type="number" id="prod-stock" class="form-control" value="10" required></div>
+                    <div><label>Couleurs (sép. virgule)</label><input type="text" id="prod-colors" class="form-control"></div>
+                </div>
+                <div class="form-row">
+                    <div><label>Dimensions</label><input type="text" id="prod-sizes" class="form-control"></div>
+                    <div><label>Image File</label><input type="file" id="prod-img" class="form-control" accept="image/*"></div>
+                </div>
+                <div style="margin-bottom:10px;"><label>Description</label><textarea id="prod-desc" class="form-control" rows="2"></textarea></div>
+                <h4 style="color:var(--primary); margin:10px 0 5px;">Fiche Technique Specs:</h4>
+                <div class="form-row">
+                    <div><label>Voltage</label><input type="text" id="spec-voltage" class="form-control" value="220-240V"></div>
+                    <div><label>Power (W)</label><input type="text" id="spec-power" class="form-control"></div>
+                </div>
+                <div class="form-row">
+                    <div><label>Safety (IP)</label><input type="text" id="spec-safety" class="form-control" value="IP20"></div>
+                    <div><label>Standards (CE / etc)</label><input type="text" id="spec-standards" class="form-control"></div>
+                </div>
+                <div style="margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" id="prod-featured"> <label for="prod-featured">Mettre en vedette (الأكثر مبيعاً)</label>
+                </div>
+                <button type="submit" class="btn">Sauvegarder</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Security logic for Admin Check
+        function verifyAdminPassword(input) {
+            let encrypted = "";
+            for(let i=0; i<input.length; i++) encrypted += (input.charCodeAt(i) + 100).toString(16);
+            return encrypted === "c5c6d3c6d3c695969787";
+        }
+
         // Local Storage State Management
         window.siteState = {
             lang: 'fr', 
-            currentMarket: 'local', // 'local' أو 'export' لتصفية الفئات والمنتجات
+            currentMarket: 'local',
             favorites: [],
             products: [
                 { id: '1', name_ar: 'كشاف إنارة عمومية LED بقوة 150 واط', name_fr: 'Projecteur Éclairage Public LED 150W', price: 28500, category: 'الإنارة العمومية والخارجية', market: 'export', img: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600', images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600'], sizes: 'Standard', colors: 'Gris Métallisé', stock: 40, featured: true, rating: 4.9, desc: "Projecteur LED à haute efficacité énergétique, étanche IP66, conçu pour l'éclairage public et les grands projets industriels. Conforme aux normes CE.", specs: { voltage: "220-240V", power: "150W", safety: "IP66 / IK08", lumens: "18,000 lm", standards: "CE, RoHS, EN 60598" } },
@@ -1017,7 +736,6 @@
             settings: { whatsapp: "213550000000", about_ar: "مؤسسة كهرالايت (KahraLight) هي شريككم الاستراتيجي لتوفير حلول ومعدات الكهرباء والإنارة الصناعية والمنزلية والعمومية في ولاية وهران وعبر التصدير الدولي.", about_fr: "L'entreprise KahraLight est votre partenaire pour les câbles, éclairages publics et intérieurs de haute qualité à Oran et à l'export.", priv_ar:"سياسة الخصوصية لـ كهرالايت", priv_fr:"Confidentialité KahraLight", ship_ar:"سياسة التوصيل السريع لجميع الولايات والبلديات.", ship_fr:"Politique de livraison KahraLight", theme: "#e67e22", map:"https://maps.google.com/maps?q=Oran,%20Algeria&t=&z=13&ie=UTF8&iwloc=&output=embed", logo:"", head:"", top_ad:"", pop_ad:"" }
         };
 
-        // Autoplay categories slider
         function startCategoriesAutoplay() {
             const container = document.getElementById('categories-container');
             if (!container) return;
@@ -1030,19 +748,14 @@
                 
                 if (isRtl) {
                     container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    if (Math.abs(container.scrollLeft) >= (maxScroll - 10)) {
-                        container.scrollTo({ left: 0, behavior: 'smooth' });
-                    }
+                    if (Math.abs(container.scrollLeft) >= (maxScroll - 10)) container.scrollTo({ left: 0, behavior: 'smooth' });
                 } else {
                     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                    if (container.scrollLeft >= (maxScroll - 10)) {
-                        container.scrollTo({ left: 0, behavior: 'smooth' });
-                    }
+                    if (container.scrollLeft >= (maxScroll - 10)) container.scrollTo({ left: 0, behavior: 'smooth' });
                 }
             }, 3000);
         }
 
-        // Safe Load Database locally
         function saveLocalDB() { localStorage.setItem('mobiliaDB', JSON.stringify(window.siteState)); }
         function loadLocalDB() {
             const db = localStorage.getItem('mobiliaDB');
@@ -1056,20 +769,16 @@
                         products: parsed.products || window.siteState.products,
                         banners: parsed.banners || window.siteState.banners,
                         orders: parsed.orders || [],
-                        customOrders: parsed.customOrders || [],
                         accounting: parsed.accounting || [],
                         categories: parsed.categories || window.siteState.categories,
                         wilayas: parsed.wilayas || window.siteState.wilayas,
                         settings: { ...window.siteState.settings, ...(parsed.settings || {}) }
                     };
-                } catch(e) {
-                    console.error("Error parsing DB:", e);
-                }
+                } catch(e) { console.error("Error parsing DB:", e); }
             }
         }
         loadLocalDB();
 
-        // UI Helpers & Navigation Update
         window.openModal = (id) => { 
             if(id === 'favorites-modal') renderFavorites();
             document.getElementById(id).style.display = 'flex'; 
@@ -1078,16 +787,13 @@
         document.getElementById('menu-btn').onclick = () => document.getElementById('sidebar').classList.add('active');
         document.getElementById('close-menu-btn').onclick = () => document.getElementById('sidebar').classList.remove('active');
 
-        // Toggle Dark Mode
         window.toggleDarkMode = () => {
             const body = document.body;
-            const icon = document.getElementById('theme-icon');
             body.classList.toggle('dark-mode');
             const isDark = body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-            if(icon) {
-                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            }
+            const icon = document.getElementById('theme-icon');
+            if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
         };
 
         if(localStorage.getItem('darkMode') === 'enabled') {
@@ -1134,14 +840,8 @@
         window.addEventListener('hashchange', router);
         window.addEventListener('load', () => {
             const icon = document.getElementById('theme-icon');
-            if(icon) {
-                icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon';
-            }
-
-            if(!localStorage.getItem('mobiliaDB')) {
-                window.siteState.lang = 'fr';
-            }
-            
+            if(icon) icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon';
+            if(!localStorage.getItem('mobiliaDB')) window.siteState.lang = 'fr';
             document.dir = window.siteState.lang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.setAttribute('dir', document.dir);
             document.documentElement.setAttribute('lang', window.siteState.lang);
@@ -1154,17 +854,12 @@
             }, 800);
         });
 
-        // لوحة تحكم الأدمن بالفرنسية كخيار افتراضي مع دعم العربية
         window.adminLang = 'fr'; 
         window.toggleAdminLanguage = () => {
             window.adminLang = window.adminLang === 'ar' ? 'fr' : 'ar';
             document.getElementById('admin-lang-toggle').innerText = window.adminLang === 'ar' ? 'FR' : 'AR';
-            
             const adminPanel = document.getElementById('admin-panel');
-            if (adminPanel) {
-                adminPanel.style.direction = window.adminLang === 'ar' ? 'rtl' : 'ltr';
-            }
-            
+            if (adminPanel) adminPanel.style.direction = window.adminLang === 'ar' ? 'rtl' : 'ltr';
             applyAdminTranslations();
         };
 
@@ -1182,7 +877,6 @@
             document.getElementById('admin-panel').style.display = 'none';
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('product-details-page').style.display = 'none';
-            closeModal('custom-modal');
 
             document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
 
@@ -1202,7 +896,6 @@
             } else {
                 document.getElementById('frontend-app').style.display = 'block';
                 document.getElementById('home-page').style.display = 'block';
-
                 const homeNav = document.getElementById('nav-home');
                 if(homeNav) homeNav.classList.add('active');
                 renderCategories(); renderFrontendProducts(); populateWilayasSelect(); updateStaticTexts(); renderBanners();
@@ -1214,18 +907,13 @@
         };
         window.openWhatsapp = () => window.open(`https://wa.me/${window.siteState.settings.whatsapp}`, '_blank');
 
-        // --- فلترة السوق المحلي مقابل جهة التصدير الدولية ---
         window.toggleMarketFilter = (marketType) => {
             window.siteState.currentMarket = marketType;
-            
-            // تحديث تصميم الأزرار التفاعلية
             document.getElementById('btn-market-local').classList.toggle('active', marketType === 'local');
             document.getElementById('btn-market-export').classList.toggle('active', marketType === 'export');
-            
             renderFrontendProducts();
         };
 
-        // --- Renders ---
         function renderCategories() {
             const isAr = window.siteState.lang === 'ar';
             document.getElementById('categories-container').innerHTML = window.siteState.categories.map(c => `
@@ -1275,7 +963,6 @@
             const loader = document.getElementById('products-loader');
             if(loader) loader.style.display = 'none';
             
-            // فلترة المنتجات بناءً على السوق النشط والبحث
             let prods = window.siteState.products.filter(p => {
                 const matchesMarket = p.market === window.siteState.currentMarket;
                 const matchesSearch = !filterStr || (p.name_ar && p.name_ar.includes(filterStr)) || p.category === filterStr;
@@ -1283,7 +970,7 @@
             });
             
             if(prods.length === 0) { 
-                document.getElementById('products-grid').innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1; padding: 40px 0; color:var(--text-muted);">Aucun produit disponible pour cette section.</p>'; 
+                document.getElementById('products-grid').innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1; padding: 40px 0; color:var(--text-muted);">Aucun produit disponible.</p>'; 
                 return; 
             }
             
@@ -1349,31 +1036,26 @@
             `).join('');
         }
 
-        // --- توليد وعرض الفيش تكنك وشهادات التصدير الرسمية ---
         window.generateOfficialDoc = (prodId, docType) => {
             const p = window.siteState.products.find(x => x.id === prodId);
             if(!p) return;
-            
-            const isAr = window.siteState.lang === 'ar';
             const container = document.getElementById('printable-area-box');
             
             if(docType === 'tech') {
-                // توليد بطاقة المواصفات الفنية
                 container.innerHTML = `
                     <div class="printable-doc">
                         <div style="display:flex; justify-content:space-between; border-bottom:3px solid var(--primary); padding-bottom:20px; margin-bottom:20px;">
                             <div>
                                 <h1 style="color:var(--primary); font-size:28px; font-weight:800; margin-bottom:5px;">KAHRALIGHT</h1>
                                 <p style="font-size:13px; color:#555;">Département Technique & Qualité</p>
-                                <p style="font-size:13px; color:#555;">Showroom & Bureau: Oran, Algérie</p>
+                                <p style="font-size:13px; color:#555;">Oran, Algérie</p>
                             </div>
                             <div style="text-align:right;">
                                 <h2 style="font-size:22px; font-weight:800; color:#333;">FICHE TECHNIQUE</h2>
-                                <p style="font-size:12px; color:#666;">Date de génération: ${new Date().toLocaleDateString()}</p>
-                                <p style="font-size:12px; color:#666;">Réf Produit: ${p.id}</p>
+                                <p style="font-size:12px; color:#666;">Date: ${new Date().toLocaleDateString()}</p>
+                                <p style="font-size:12px; color:#666;">Réf: ${p.id}</p>
                             </div>
                         </div>
-                        
                         <div style="display:flex; gap:20px; margin-bottom:30px;">
                             <img src="${p.img}" style="width:150px; height:150px; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
                             <div>
@@ -1381,8 +1063,7 @@
                                 <p style="font-size:14px; color:#444; line-height:1.6;">${p.desc}</p>
                             </div>
                         </div>
-
-                        <h3 style="border-bottom:2px solid #ccc; padding-bottom:8px; margin-bottom:15px; font-weight:800; color:#2c3e50;">Spécifications Techniques Officielles</h3>
+                        <h3 style="border-bottom:2px solid #ccc; padding-bottom:8px; margin-bottom:15px; font-weight:800; color:#2c3e50;">Spécifications Techniques</h3>
                         <table style="width:100%; border-collapse:collapse; margin-bottom:30px;">
                             ${Object.entries(p.specs || {}).map(([key, val]) => `
                                 <tr>
@@ -1391,52 +1072,26 @@
                                 </tr>
                             `).join('')}
                         </table>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:2px solid #eee; padding-top:20px; margin-top:30px;">
-                            <div>
-                                <p style="font-size:12px; font-weight:bold;">Sceau de Conformité KahraLight</p>
-                                <div style="width:100px; height:100px; border:2px dashed #e67e22; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#e67e22; font-weight:bold; font-size:10px; transform:rotate(-15deg); margin-top:10px;">
-                                    APPROVED CE
-                                </div>
-                            </div>
-                            <div id="doc-qrcode-container"></div>
-                        </div>
                     </div>
                 `;
             } else if (docType === 'cert') {
-                // توليد شهادة المطابقة للتصدير
                 container.innerHTML = `
                     <div class="printable-doc" style="border-color:#003399;">
                         <div style="text-align:center; border-bottom:2px solid #003399; padding-bottom:20px; margin-bottom:25px;">
                             <h1 style="color:#003399; font-size:32px; font-weight:900; margin-bottom:5px; letter-spacing:2px;">CERTIFICATE OF CONFORMITY</h1>
-                            <p style="font-size:14px; color:#555; text-transform:uppercase; font-weight:bold; letter-spacing:1px;">CE / EU Standards Conformity Declaration</p>
+                            <p style="font-size:14px; color:#555; text-transform:uppercase; font-weight:bold; letter-spacing:1px;">CE / EU Declaration</p>
                         </div>
-
                         <div style="margin:40px 0; font-size:16px; line-height:1.8; color:#333; text-align:justify;">
-                            <p>We hereby declare under our sole responsibility that the designated electrical product described below conforms fully with the essential health, safety, and environmental protection standards set by the European Union directives.</p>
+                            <p>This certifies that the designated electrical product complies fully with safety and environmental protection standards of the European Union.</p>
                         </div>
-
                         <table style="width:100%; border-collapse:collapse; margin-bottom:40px; background:#f9f9f9; border:1px solid #ccc;">
                             <tr><td style="padding:12px; font-weight:bold; width:35%;">Product Description:</td><td style="padding:12px;">${p.name_fr}</td></tr>
                             <tr><td style="padding:12px; font-weight:bold;">Model/Réf Number:</td><td style="padding:12px;">KL-EXP-${p.id}</td></tr>
-                            <tr><td style="padding:12px; font-weight:bold;">Applicable Directives:</td><td style="padding:12px; color:#003399; font-weight:bold;">LVD 2014/35/EU, EMC 2014/30/EU, RoHS 2011/65/EU</td></tr>
-                            <tr><td style="padding:12px; font-weight:bold;">Certified Standards:</td><td style="padding:12px;">${p.specs.standards || "CE Conformity"}</td></tr>
+                            <tr><td style="padding:12px; font-weight:bold;">Directives:</td><td style="padding:12px; color:#003399; font-weight:bold;">LVD 2014/35/EU, EMC 2014/30/EU</td></tr>
                         </table>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:50px;">
-                            <div style="text-align:center;">
-                                <div style="font-size:36px; color:#003399; font-weight:900; margin-bottom:5px;">CE</div>
-                                <p style="font-size:11px; color:#555;">EU Representative Stamp</p>
-                            </div>
-                            <div style="text-align:right;">
-                                <p style="font-size:13px; font-weight:bold;">Authorized Representative Signature</p>
-                                <p style="font-size:12px; color:#777; margin-top:40px; border-top:1px solid #aaa; padding-top:5px;">KahraLight Export Control Board</p>
-                            </div>
-                        </div>
                     </div>
                 `;
             }
-
             openModal('printable-doc-modal');
         };
 
@@ -1485,7 +1140,6 @@
 
             let mainImg = p.images && p.images.length > 0 ? p.images[0] : p.img;
             
-            // تخصيص الأزرار لمستندات التصدير أو البطاقة التقنية
             let docButtons = `
                 <div class="tech-docs-container">
                     <div class="tech-docs-header">
@@ -1502,11 +1156,11 @@
                     </table>
                     <div class="doc-btn-group">
                         <button class="btn-doc" onclick="generateOfficialDoc('${p.id}', 'tech')">
-                            <i class="fas fa-file-pdf"></i> ${isAr?'البطاقة التقنية (Fiche Technique)':'Fiche Technique'}
+                            <i class="fas fa-file-pdf"></i> ${isAr?'البطاقة التقنية':'Fiche Technique'}
                         </button>
                         ${p.market === 'export' ? `
                             <button class="btn-doc btn-ce" onclick="generateOfficialDoc('${p.id}', 'cert')">
-                                <i class="fas fa-award"></i> ${isAr?'شهادة التصدير والـ CE':'Certificat Export (CE)'}
+                                <i class="fas fa-award"></i> ${isAr?'شهادة التصدير (CE)':'Certificat Export (CE)'}
                             </button>
                         ` : ''}
                     </div>
@@ -1549,17 +1203,17 @@
                         <div class="pro-form-group">
                             <label>${isAr?'نوع التوصيل':'Type de livraison'}</label>
                             <select id="chk-delivery" class="pro-input" onchange="calcCheckoutTotal(${p.price})">
-                                <option value="desk">${isAr?'إلى مكتب التوصيل (نقطة استلام)':'Point de relais'}</option>
+                                <option value="desk">${isAr?'إلى مكتب التوصيل':'Point de relais'}</option>
                                 <option value="home">${isAr?'توصيل منزلي':'À domicile'}</option>
                             </select>
                         </div>
                         
                         <div style="background:var(--bg-card); padding:20px; border-radius:16px; margin-bottom:20px; font-size:16px; color:var(--text-main); border:1px solid var(--border-color); box-shadow:var(--shadow);">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${isAr?'سعر المنتج':'Prix du produit'}:</span> <strong>${p.price.toLocaleString()} ${currency}</strong></div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${isAr?'سعر المنتج':'Prix'}:</span> <strong>${p.price.toLocaleString()} ${currency}</strong></div>
                             <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;"><span>${isAr?'تكلفة التوصيل':'Livraison'}:</span> <strong><span id="chk-shipping-price">0</span> ${currency}</strong></div>
                             <div style="display:flex; justify-content:space-between; font-size:22px; color:var(--primary); font-weight:800; margin-top:10px;"><span>${isAr?'الإجمالي':'Total'}:</span> <span><span id="chk-total-price">${p.price.toLocaleString()}</span> ${currency}</span></div>
                         </div>
-                        <button class="btn btn-pulse-submit" onclick="submitProductOrder('${p.id}')"><i class="fas fa-shopping-cart" style="margin-left:8px;"></i> ${isAr?'تأكيد طلب الشراء':'Confirmer la commande'}</button>
+                        <button class="btn btn-pulse-submit" onclick="submitProductOrder('${p.id}')"><i class="fas fa-shopping-cart" style="margin-left:8px;"></i> ${isAr?'تأكيد طلب الشراء':'Confirmer'}</button>
                     </div>
                 </div>`;
         }
@@ -1583,14 +1237,12 @@
             const address = document.getElementById('chk-address').value;
             const sizeEl = document.querySelector('input[name="chk-size"]:checked');
             const colorEl = document.querySelector('input[name="chk-color"]:checked');
-            const size = sizeEl ? sizeEl.value : '';
-            const color = colorEl ? colorEl.value : '';
             
             if(!name || !phone || !wilaya.value || !address) return alert(window.siteState.lang==='ar'?"يرجى ملء جميع الحقول":"Veuillez remplir tous les champs");
 
             const shipPrice = document.getElementById('chk-shipping-price').innerText.replace(/\D/g, '');
             const total = document.getElementById('chk-total-price').innerText.replace(/\D/g, '');
-            const prodNameFull = `${p.name_ar} ${size?`(${size})`:''} ${color?`[${color}]`:''}`;
+            const prodNameFull = `${p.name_ar} ${sizeEl?`(${sizeEl.value})`:''} ${colorEl?`[${colorEl.value}]`:''}`;
 
             const order = { id: 'O-'+Date.now().toString().slice(-6), type: 'product', prodName: prodNameFull, customer: name, phone: phone, wilaya: wilaya.options[wilaya.selectedIndex].text, address: address, total: total, prodPrice: p.price, shipPrice: shipPrice, status: 'pending', date: new Date().toISOString() };
             window.siteState.orders.push(order);
@@ -1640,12 +1292,20 @@
             document.getElementById('stat-new-orders').innerText = o.filter(x=>x.status==='pending').length;
             document.getElementById('stat-conf-orders').innerText = o.filter(x=>x.status==='confirmed').length;
             document.getElementById('stat-canc-orders').innerText = o.filter(x=>x.status==='cancelled').length;
+            
+            try {
+                if(window.chartInst) window.chartInst.destroy();
+                window.chartInst = new Chart(document.getElementById('salesChart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: ['Confirmed', 'Pending', 'Cancelled'], datasets: [{ data: [o.filter(x=>x.status==='confirmed').length, o.filter(x=>x.status==='pending').length, o.filter(x=>x.status==='cancelled').length], backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c'] }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            } catch(e) {}
         }
 
         window.renderAdminOrders = () => {
             let ordersToDisplay = window.siteState.orders.slice();
             ordersToDisplay.sort((a, b) => new Date(b.date) - new Date(a.date));
-
             document.getElementById('orders-tbody').innerHTML = ordersToDisplay.map(o => `
             <tr>
                 <td><input type="checkbox" class="order-check" value="${o.id}"></td>
@@ -1653,12 +1313,21 @@
                 <td><strong>${o.prodName}</strong></td>
                 <td>${o.customer}<br>${o.phone}</td>
                 <td>${o.total} DA</td>
-                <td>${o.status}</td>
                 <td>
+                    <select onchange="changeOrderStatus('${o.id}', this.value)" class="status-badge ${o.status==='confirmed'?'status-confirmed':(o.status==='cancelled'?'status-cancelled':'status-pending')}">
+                        <option value="pending" ${o.status==='pending'?'selected':''}>Attente</option>
+                        <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmé</option>
+                        <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Annulé</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="action-btn" style="background:#34495e;" onclick="window.openLabelModalSafe('${o.id}')" title="Imprimer"><i class="fas fa-print"></i></button>
                     <button class="action-btn" style="background:var(--danger);" onclick="window.deleteOrder('${o.id}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>`).join('');
         };
+        window.changeOrderStatus = (id, status) => { const o = window.siteState.orders.find(x=>x.id===id); if(o) { o.status = status; saveLocalDB(); updateAdminDashboard(); } };
+        window.deleteOrder = (id) => { if(confirm("Supprimer?")) { window.siteState.orders = window.siteState.orders.filter(x=>x.id!==id); saveLocalDB(); renderAdminOrders(); updateAdminDashboard(); } };
 
         window.renderAdminProducts = () => {
             document.getElementById('admin-products-grid').innerHTML = window.siteState.products.map(p => {
@@ -1666,19 +1335,196 @@
                 return `
                 <div class="product-card">
                     <img src="${thumbImg}" class="product-img">
-                    <div class="product-info"><strong>${p.name_fr}</strong><p>${p.price} DA</p></div>
+                    <div class="product-info"><strong>${p.name_fr}</strong><p>${p.price} DA</p>
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                        <button class="btn" style="background:var(--secondary); padding:5px; font-size:12px;" onclick="window.editProduct('${p.id}')">Modifier</button>
+                        <button class="btn" style="background:var(--danger); padding:5px; font-size:12px;" onclick="window.deleteProductItem('${p.id}')">Supprimer</button>
+                    </div></div>
                 </div>`
             }).join('');
         };
 
+        window.openProductModal = () => {
+            document.getElementById('prod-id').value = '';
+            document.querySelectorAll('#add-product-modal input, #add-product-modal textarea').forEach(el=>el.value='');
+            document.getElementById('prod-stock').value = '10';
+            document.getElementById('prod-featured').checked = false;
+            
+            // تعبئة تصنيفات المنتجات
+            const catSelect = document.getElementById('prod-category');
+            catSelect.innerHTML = window.siteState.categories.map(c=>`<option value="${c.name_ar}">${c.name_fr}</option>`).join('');
+            
+            openModal('add-product-modal');
+        };
+
+        window.editProduct = (id) => {
+            const p = window.siteState.products.find(x => x.id === id); if(!p) return;
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-name-ar').value = p.name_ar||'';
+            document.getElementById('prod-name-fr').value = p.name_fr||'';
+            document.getElementById('prod-price').value = p.price||'';
+            document.getElementById('prod-old-price').value = p.oldPrice||'';
+            document.getElementById('prod-market').value = p.market||'local';
+            document.getElementById('prod-stock').value = p.stock||'10';
+            document.getElementById('prod-colors').value = p.colors||'';
+            document.getElementById('prod-sizes').value = p.sizes||'';
+            document.getElementById('prod-desc').value = p.desc||'';
+            document.getElementById('prod-featured').checked = p.featured||false;
+            
+            // تعبئة المواصفات الفنية
+            document.getElementById('spec-voltage').value = p.specs?.voltage || '220-240V';
+            document.getElementById('spec-power').value = p.specs?.power || '';
+            document.getElementById('spec-safety').value = p.specs?.safety || 'IP20';
+            document.getElementById('spec-standards').value = p.specs?.standards || '';
+
+            const catSelect = document.getElementById('prod-category');
+            catSelect.innerHTML = window.siteState.categories.map(c=>`<option value="${c.name_ar}" ${p.category===c.name_ar?'selected':''}>${c.name_fr}</option>`).join('');
+            
+            openModal('add-product-modal');
+        };
+
+        window.saveProduct = async () => {
+            const id = document.getElementById('prod-id').value;
+            const files = document.getElementById('prod-img').files;
+            let imagesArray = [];
+            if(files.length > 0) {
+                for(let i=0; i<files.length; i++) imagesArray.push(await compressImage(files[i], 600));
+            }
+            
+            const specs = {
+                voltage: document.getElementById('spec-voltage').value,
+                power: document.getElementById('spec-power').value,
+                safety: document.getElementById('spec-safety').value,
+                standards: document.getElementById('spec-standards').value
+            };
+
+            const pData = {
+                name_ar: document.getElementById('prod-name-ar').value,
+                name_fr: document.getElementById('prod-name-fr').value,
+                price: parseInt(document.getElementById('prod-price').value||0),
+                oldPrice: document.getElementById('prod-old-price').value ? parseInt(document.getElementById('prod-old-price').value) : null,
+                category: document.getElementById('prod-category').value,
+                market: document.getElementById('prod-market').value,
+                sizes: document.getElementById('prod-sizes').value,
+                colors: document.getElementById('prod-colors').value,
+                stock: parseInt(document.getElementById('prod-stock').value||0),
+                desc: document.getElementById('prod-desc').value,
+                featured: document.getElementById('prod-featured').checked,
+                specs: specs
+            };
+            
+            if(id) {
+                const idx = window.siteState.products.findIndex(x=>x.id===id);
+                pData.images = imagesArray.length > 0 ? imagesArray : window.siteState.products[idx].images;
+                pData.img = imagesArray.length > 0 ? imagesArray[0] : window.siteState.products[idx].img;
+                window.siteState.products[idx] = {...pData, id};
+            } else {
+                if(imagesArray.length === 0) imagesArray = ['https://via.placeholder.com/300'];
+                window.siteState.products.push({...pData, id: 'P'+Date.now(), img:imagesArray[0], images:imagesArray});
+            }
+            saveLocalDB(); renderAdminProducts(); renderFrontendProducts(); closeModal('add-product-modal');
+        };
+
+        window.deleteProductItem = (id) => {
+            if(confirm("Supprimer?")) {
+                window.siteState.products = window.siteState.products.filter(x=>x.id!==id);
+                saveLocalDB(); renderAdminProducts(); renderFrontendProducts();
+            }
+        };
+
+        window.renderAdminCategories = () => {
+            document.getElementById('admin-categories-grid').innerHTML = window.siteState.categories.map(c => `
+            <div class="product-card" style="border:1px solid var(--border-color); text-align:center;">
+                <img src="${c.img}" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
+                <div class="product-info"><strong>${c.name_fr}</strong>
+                    <button class="btn" style="background:var(--danger); padding:5px; margin-top:5px; font-size:12px;" onclick="window.deleteCategoryItem('${c.id}')">Supprimer</button>
+                </div>
+            </div>`).join('');
+        };
+
+        window.openCategoryModal = () => {
+            // إضافة الفئة
+            const ar = prompt("Nom Arabe:");
+            const fr = prompt("Nom Français:");
+            if(ar && fr) {
+                window.siteState.categories.push({ id:'c'+Date.now(), name_ar:ar, name_fr:fr, sub_ar:'', sub_fr:'', img:'https://via.placeholder.com/300' });
+                saveLocalDB(); renderAdminCategories(); renderCategories();
+            }
+        };
+
+        window.deleteCategoryItem = (id) => {
+            if(confirm("Supprimer?")) {
+                window.siteState.categories = window.siteState.categories.filter(c=>c.id!==id);
+                saveLocalDB(); renderAdminCategories(); renderCategories();
+            }
+        };
+
+        window.renderAdminBanners = () => {
+            document.getElementById('admin-banners-list').innerHTML = window.siteState.banners.map(b => `
+                <div style="position:relative; min-width:150px;">
+                    <img src="${b.img}" style="width:150px; height:80px; object-fit:cover; border-radius:5px;">
+                    <button class="btn" style="position:absolute; top:5px; right:5px; background:red; width:30px; height:30px; padding:0;" onclick="window.deleteBannerItem('${b.id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        };
+
+        window.addBanner = async () => {
+            const file = document.getElementById('banner-img').files[0]; if(!file) return;
+            window.siteState.banners.push({ id:'b'+Date.now(), img: await compressImage(file, 800), title_ar:'KahraLight', title_fr:'KahraLight', desc_ar:'', desc_fr:'', link: document.getElementById('banner-link').value });
+            saveLocalDB(); renderAdminBanners(); renderBanners();
+        };
+
+        window.deleteBannerItem = (id) => {
+            if(confirm("Supprimer?")) {
+                window.siteState.banners = window.siteState.banners.filter(x=>x.id!==id);
+                saveLocalDB(); renderAdminBanners(); renderBanners();
+            }
+        };
+
+        window.openLabelModalSafe = (id) => {
+            const o = window.siteState.orders.find(x => x.id === id);
+            if(!o) return;
+            const container = document.getElementById('printable-area-box');
+            container.innerHTML = `
+                <div class="printable-doc" style="border:5px solid var(--primary); padding:30px; text-align:left;">
+                    <h2 style="color:var(--primary); font-size:24px; font-weight:800; border-bottom:2px solid var(--primary); padding-bottom:10px; margin-bottom:15px;">BON DE LIVRAISON</h2>
+                    <p style="font-size:14px; margin-bottom:5px;"><strong>ID Commande:</strong> ${o.id}</p>
+                    <p style="font-size:14px; margin-bottom:5px;"><strong>Client:</strong> ${o.customer}</p>
+                    <p style="font-size:14px; margin-bottom:5px;"><strong>Téléphone:</strong> ${o.phone}</p>
+                    <p style="font-size:14px; margin-bottom:5px;"><strong>Wilaya:</strong> ${o.wilaya}</p>
+                    <p style="font-size:14px; margin-bottom:15px;"><strong>Adresse:</strong> ${o.address}</p>
+                    <h4 style="border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px;">Produits</h4>
+                    <p style="font-size:15px; font-weight:bold; color:#111;">${o.prodName}</p>
+                    <p style="font-size:16px; font-weight:bold; color:var(--primary); text-align:right; margin-top:20px;">Total à Payer: ${o.total} DA</p>
+                </div>
+            `;
+            openModal('printable-doc-modal');
+        };
+
+        window.renderAccounting = () => {};
+        window.changeTheme = (color) => {
+            document.documentElement.style.setProperty('--primary', color); window.siteState.settings.theme = color;
+            saveLocalDB(); localStorage.setItem('siteSettings', JSON.stringify(window.siteState.settings));
+        };
+
+        function compressImage(file, maxSize) {
+            return new Promise((resolve) => {
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image(); img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas'); let w = img.width; let h = img.height;
+                        if (w > maxSize) { h *= maxSize / w; w = maxSize; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+                    };
+                };
+            });
+        }
+
         window.downloadPDF = (elemId, filename) => { 
-            html2pdf().set({ 
-                margin: 0.5, 
-                filename: filename, 
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2 }, 
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
-            }).from(document.getElementById(elemId)).save(); 
+            html2pdf().set({ margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(document.getElementById(elemId)).save(); 
         };
         function applyTheme(color) { if(color) document.documentElement.style.setProperty('--primary', color); }
     </script>
